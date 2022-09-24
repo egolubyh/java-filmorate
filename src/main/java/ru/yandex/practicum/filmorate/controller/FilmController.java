@@ -1,30 +1,44 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/filmorate")
 public class FilmController {
     private final Map<Integer, Film> films = new HashMap<>();
+    private int id;
 
-    @PostMapping(value = "/film")
-    public Film createFilm(@RequestBody Film film) {
-        return films.put(film.getId(), film);
+    @PostMapping(value = "/films")
+    public Film createFilm(@RequestBody Film film) throws ValidationException {
+        if (!valid(film)) throw new ValidationException();
+        film.setId(++id);
+        films.put(film.getId(), film);
+        return film;
     }
 
-    @PutMapping(value = "film")
-    public Film updateFilm(@RequestBody Film film) {
-        return films.put(film.getId(), film);
+    @PutMapping(value = "/films")
+    public Film updateFilm(@RequestBody Film film) throws ValidationException {
+        if (!films.containsKey(film.getId()) || !valid(film)) throw new ValidationException();
+        films.put(film.getId(), film);
+        return film;
     }
 
     @GetMapping("/films")
     public List<Film> findAllFilms() {
         return new ArrayList<>(films.values());
+    }
+
+    private boolean valid(Film film) {
+        if (film.getName().isEmpty()) return false;
+        if (film.getDescription().length() > 200) return false;
+        if (film.getReleaseDate().isBefore(LocalDate.of(1895,9,28))) return false;
+        return film.getDuration() > 0;
     }
 }
