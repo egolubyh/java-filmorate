@@ -35,6 +35,10 @@ public class InMemoryUserStorage implements UserStorage {
         return user;
     }
 
+    public User findUserById(int id) {
+        return users.get(id);
+    }
+
     public List<User> findAll() {
         return new ArrayList<>(users.values());
     }
