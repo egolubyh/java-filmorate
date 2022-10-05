@@ -19,6 +19,11 @@ public class UserService {
         this.userStorage = userStorage;
     }
 
+    /**
+     * Пользователь добавляет друга.
+     * @param userId идентификатор пользователя.
+     * @param friendId идентификатор друга.
+     */
     public void addFriend(int userId, int friendId) {
         User user = userStorage.findUserById(userId);
         User friend = userStorage.findUserById(friendId);
@@ -27,6 +32,11 @@ public class UserService {
         friend.getFriends().add(userId);
     }
 
+    /**
+     * Пользователь удаляет друга.
+     * @param userId идентификатор пользователя.
+     * @param friendId идентификатор друга.
+     */
     public void deleteFriend(int userId, int friendId) {
         User user = userStorage.findUserById(userId);
         User friend = userStorage.findUserById(friendId);
@@ -35,6 +45,12 @@ public class UserService {
         friend.getFriends().remove(userId);
     }
 
+    /**
+     * Получить список общих друзей.
+     * @param userId идентификатор пользователя.
+     * @param friendId идентификатор друга.
+     * @return список общих друзей.
+     */
     public List<User> findAllMutualFriends(int userId, int friendId) {
         Set<Integer> user = new HashSet<>(userStorage.findUserById(userId).getFriends());
         Set<Integer> friends = new HashSet<>(userStorage.findUserById(friendId).getFriends());

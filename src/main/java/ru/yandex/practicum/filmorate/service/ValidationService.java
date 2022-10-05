@@ -9,8 +9,11 @@ import java.time.LocalDate;
 @Service
 public class ValidationService {
 
-/**
- * Валидация фильма*/
+    /**
+     * Проверка всех полей фильма на допустимость.
+     * @param film фильм.
+     * @return результат соответствия true или false.
+     */
     public boolean isValid(Film film) {
         if (film.getId() < 0) return false;
         if (film.getName() == null || film.getDescription() == null
@@ -21,8 +24,11 @@ public class ValidationService {
         return film.getDuration() > 0;
     }
 
-/**
- * Валидация пользователя*/
+    /**
+     * Проверка всех полей пользователя на допустимость.
+     * @param user пользователь.
+     * @return результат соответствия true или false.
+     */
     public boolean isValid(User user) {
         if (user.getId() < 0) return false;
         if (user.getEmail() == null || user.getLogin() == null || user.getBirthday() == null) return false;

@@ -32,6 +32,12 @@ public class FilmController {
         this.validationService = validationService;
     }
 
+    /**
+     * Добавить фильм.
+     * @param film фильм.
+     * @return Film добавленный фильм.
+     * @throws ValidationException если поля фильма не допустимы.
+     */
     @PostMapping("/films")
     public Film createFilm(@RequestBody Film film) throws ValidationException {
         log.info("Получен запрос к эндпоинту: /films, метод POST");
@@ -43,8 +49,15 @@ public class FilmController {
         return filmStorage.createFilm(film);
     }
 
+    /**
+     * Обновить информацию о фильме.
+     * @param film фильм.
+     * @return Film обновленный фильм.
+     * @throws NotFoundException если id переданного фильма не существует.
+     * @throws ValidationException если поля фильма недопустимые.
+     */
     @PutMapping("/films")
-    public Film updateFilm(@RequestBody Film film) throws Exception {
+    public Film updateFilm(@RequestBody Film film) throws NotFoundException, ValidationException {
         log.info("Получен запрос к эндпоинту: /films, метод PUT");
         if (filmStorage.idNotExist(film.getId())) {
             log.error("Ошибка, фильма с таким id = " + film.getId() + " не существует.");
@@ -59,6 +72,13 @@ public class FilmController {
         return filmStorage.updateFilm(film);
     }
 
+    /**
+     * Пользователь ставит лайк фильму.
+     * @param id идентификатор фильма.
+     * @param userId идентификатор пользователя.
+     * @throws NotFoundException если пользователя или фильма с таким идентификатором
+     * не существует.
+     */
     @PutMapping("/films/{id}/like/{userId}")
     public void addLike(@PathVariable int id,
                         @PathVariable int userId)  throws NotFoundException {
@@ -76,6 +96,13 @@ public class FilmController {
         filmService.addLike(id,userId);
     }
 
+    /**
+     * Пользователь удаляет лайк.
+     * @param id идентификатор фильма.
+     * @param userId идентификатор пользователя.
+     * @throws NotFoundException если пользователя или фильма с таким идентификатором
+     * не существует.
+     */
     @DeleteMapping("/films/{id}/like/{userId}")
     public void deleteLike(@PathVariable int id,
                            @PathVariable int userId)  throws NotFoundException {
@@ -93,6 +120,10 @@ public class FilmController {
         filmService.deleteLike(id,userId);
     }
 
+    /**
+     * Возвращает все фильмы.
+     * @return список всех пользователей.
+     */
     @GetMapping("/films")
     public List<Film> findAllFilms() {
         log.info("Получен запрос к эндпоинту: /films, метод GET");
@@ -100,6 +131,13 @@ public class FilmController {
         return filmStorage.findAll();
     }
 
+    /**
+     * Возвращает фильм по идентификатору.
+     * @param id идентификатор фильма.
+     * @return фильм.
+     * @throws NotFoundException если фильма с таким идентификатором
+     * не существует.
+     */
     @GetMapping("/films/{id}")
     public Film findFilmById(@PathVariable int id) throws NotFoundException {
         log.info("Получен запрос к эндпоинту: /films/{id}, метод GET");
@@ -111,6 +149,12 @@ public class FilmController {
         return filmStorage.findFilmById(id);
     }
 
+    /**
+     * Возвращает список из первых count фильмов по количеству лайков.
+     * Если значение параметра count не задано, вернет первые 10.
+     * @param count количество возвращаемых фильмов.
+     * @return список фильмов.
+     */
     @GetMapping("/films/popular")
     public List<Film> findMostPopularFilms(
             @RequestParam(defaultValue = "10", required = false) int count) {

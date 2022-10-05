@@ -17,18 +17,33 @@ public class FilmService {
         this.filmStorage = filmStorage;
     }
 
+    /**
+     * Добавить лайк фильму.
+     * @param filmId идентификатор фильма.
+     * @param userId идентификатор пользователя.
+     */
     public void addLike(int filmId, int userId) {
         Film film = filmStorage.findFilmById(filmId);
 
         film.getLikes().add(userId);
     }
 
+    /**
+     * Удалить лайк фильму.
+     * @param filmId идентификатор фильма.
+     * @param userId идентификатор пользователя.
+     */
     public void deleteLike(int filmId, int userId) {
         Film film = filmStorage.findFilmById(filmId);
 
         film.getLikes().remove(userId);
     }
 
+    /**
+     * Получить список популярных фильмов.
+     * @param count длинна списка.
+     * @return список фильмов.
+     */
     public List<Film> findMostPopularFilms(int count) {
         return filmStorage.findAll().stream()
                 .sorted((o1, o2) -> (o1.getLikes().size() - o2.getLikes().size()) * (-1))

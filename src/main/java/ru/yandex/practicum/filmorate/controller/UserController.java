@@ -28,6 +28,12 @@ public class UserController {
         this.validationService = validationService;
     }
 
+    /**
+     * Добавить нового пользователя.
+     * @param user пользователь.
+     * @return Возвращает добавленного пользователя с присвоенным идентификатором.
+     * @throws ValidationException если поля пользователя недопустимы.
+     */
     @PostMapping("/users")
     public User createUser(@RequestBody User user) throws ValidationException {
         log.info("Получен запрос к эндпоинту: /users, метод POST");
@@ -39,6 +45,12 @@ public class UserController {
         return userStorage.createUser(user);
     }
 
+    /**
+     * Обновить информацию о пользователе.
+     * @param user пользователь.
+     * @return Возвращает обновленного пользователя.
+     * @throws Exception если пользователя с таким id не существует или недопустимые поля пользователя.
+     */
     @PutMapping("/users")
     public User updateUser(@RequestBody User user) throws Exception {
         log.info("Получен запрос к эндпоинту: /users, метод PUT");
@@ -55,6 +67,12 @@ public class UserController {
         return userStorage.updateUser(user);
     }
 
+    /**
+     * Добавление в друзья.
+     * @param id идентификатор пользователя.
+     * @param friendId идентификатор друга.
+     * @throws NotFoundException если пользователя или друга с таким id не существует.
+     */
     @PutMapping("/users/{id}/friends/{friendId}")
     public void addFriends(@PathVariable int id,
                            @PathVariable int friendId) throws NotFoundException {
@@ -71,6 +89,12 @@ public class UserController {
         userService.addFriend(id,friendId);
     }
 
+    /**
+     * Удаление из друзей.
+     * @param id идентификатор пользователя.
+     * @param friendId идентификатор друга.
+     * @throws NotFoundException если пользователя или друга с таким id не существует.
+     */
     @DeleteMapping("/users/{id}/friends/{friendId}")
     public void deleteFriends(@PathVariable int id,
                               @PathVariable int friendId) throws NotFoundException {
@@ -87,6 +111,10 @@ public class UserController {
         userService.deleteFriend(id,friendId);
     }
 
+    /**
+     * Получить список всех пользователей.
+     * @return список всех пользователей.
+     */
     @GetMapping("/users")
     public List<User> findAllUsers() {
         log.info("Получен запрос к эндпоинту: /users, метод GET");
@@ -94,8 +122,14 @@ public class UserController {
         return userStorage.findAll();
     }
 
+    /**
+     * Получить пользователя по id.
+     * @param id идентификатор пользователя.
+     * @return User пользователь.
+     * @throws NotFoundException если пользователя с таким id не существует.
+     */
     @GetMapping("/users/{id}")
-    public User findUserById(@PathVariable int id) throws Exception {
+    public User findUserById(@PathVariable int id) throws NotFoundException {
         log.info("Получен запрос к эндпоинту: /users/{id}, метод GET");
         if (userStorage.idNotExist(id)) {
             log.error("Ошибка, пользователя с таким id = " + id + " не существует.");
@@ -104,6 +138,12 @@ public class UserController {
         return userStorage.findUserById(id);
     }
 
+    /**
+     * Получить список всех друзей конкретного пользователя.
+     * @param id идентификатор пользователя.
+     * @return список друзей.
+     * @throws NotFoundException если пользователя с таким id не существует.
+     */
     @GetMapping("/users/{id}/friends")
     public List<User> findAllFriendsUserById(@PathVariable int id) throws NotFoundException {
         log.info("Получен запрос к эндпоинту: /users/{id}/friends, метод GET");
@@ -115,6 +155,13 @@ public class UserController {
         return userStorage.findAllFriendsUserById(id);
     }
 
+    /**
+     * Получить список одщих друзей пользователя с другом.
+     * @param id идентификатор пользователя.
+     * @param otherId идентификатор друга.
+     * @return Список общих друзей.
+     * @throws NotFoundException если пользователя или друга с таким id не существует.
+     */
     @GetMapping("/users/{id}/friends/common/{otherId}")
     public List<User> findAllMutualFriends(@PathVariable int id,
                            @PathVariable int otherId) throws NotFoundException {
