@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,8 +36,8 @@ public class UserService {
     }
 
     public List<User> findAllMutualFriends(int userId, int friendId) {
-        Set<Integer> user = userStorage.findUserById(userId).getFriends();
-        Set<Integer> friends = userStorage.findUserById(friendId).getFriends();
+        Set<Integer> user = new HashSet<>(userStorage.findUserById(userId).getFriends());
+        Set<Integer> friends = new HashSet<>(userStorage.findUserById(friendId).getFriends());
 
         friends.retainAll(user);
         return friends.stream()
