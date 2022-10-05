@@ -44,7 +44,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         return new ArrayList<>(films.values());
     }
 
-    public boolean filmIsExist(int id) {
-        return films.containsKey(id);
+    public boolean idNotExist(int id) {
+        return !films.containsKey(id);
     }
 }

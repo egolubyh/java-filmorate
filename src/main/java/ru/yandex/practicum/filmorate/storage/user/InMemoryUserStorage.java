@@ -50,8 +50,8 @@ public class InMemoryUserStorage implements UserStorage {
         return new ArrayList<>(users.values());
     }
 
-    public boolean userIsExist(int id) {
-        return users.containsKey(id);
+    public boolean idNotExist(int id) {
+        return !users.containsKey(id);
     }
 
 
