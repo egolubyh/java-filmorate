@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class InMemoryUserStorage implements UserStorage {
@@ -39,6 +40,12 @@ public class InMemoryUserStorage implements UserStorage {
         return users.get(id);
     }
 
+    public List<User> findAllFriendsUserById(int id) {
+        return users.get(id).getFriends().stream()
+                .map(users::get)
+                .collect(Collectors.toList());
+    }
+
     public List<User> findAll() {
         return new ArrayList<>(users.values());
     }
@@ -46,4 +53,6 @@ public class InMemoryUserStorage implements UserStorage {
     public boolean userIsExist(int id) {
         return users.containsKey(id);
     }
+
+
 }
