@@ -1,16 +1,20 @@
 package ru.yandex.practicum.filmorate.service;
 
 
+import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
-
+@Service
 public class ValidationService {
 
-/**
- * Валидация фильма*/
-    public static boolean valid(Film film) {
+    /**
+     * Проверка всех полей фильма на допустимость.
+     * @param film фильм.
+     * @return результат соответствия true или false.
+     */
+    public boolean isValid(Film film) {
         if (film.getId() < 0) return false;
         if (film.getName() == null || film.getDescription() == null
                 || film.getReleaseDate() == null || film.getDuration() == null) return false;
@@ -20,9 +24,12 @@ public class ValidationService {
         return film.getDuration() > 0;
     }
 
-/**
- * Валидация пользователя*/
-    public static boolean valid(User user) {
+    /**
+     * Проверка всех полей пользователя на допустимость.
+     * @param user пользователь.
+     * @return результат соответствия true или false.
+     */
+    public boolean isValid(User user) {
         if (user.getId() < 0) return false;
         if (user.getEmail() == null || user.getLogin() == null || user.getBirthday() == null) return false;
         if (user.getName() == null || user.getName().isEmpty()) user.setName(user.getLogin());
