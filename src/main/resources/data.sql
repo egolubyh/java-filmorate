@@ -1,4 +1,4 @@
-MERGE INTO PUBLIC."user" VALUES
+MERGE INTO users VALUES
     ( 1, 'Алексей', 'alex', 'alex@mail.com', '1991-01-01'),
     ( 2, 'Егор', 'egor', 'egor@mail.com', '1992-02-02'),
     ( 3, 'Борис', 'boris', 'boris@mail.com', '1993-03-03'),
@@ -10,7 +10,7 @@ MERGE INTO PUBLIC."user" VALUES
     ( 9, 'Максим', 'max', 'max@mail.com', '1998-08-08'),
     ( 10, 'Михаил', 'misha', 'misha@mail.com', '1998-09-09');
 
-MERGE INTO PUBLIC."friend" VALUES
+MERGE INTO friends VALUES
     ( 1, 1, 2, TRUE),
     ( 2, 2, 1, TRUE),
     ( 3, 1, 3, TRUE),
@@ -22,14 +22,14 @@ MERGE INTO PUBLIC."friend" VALUES
     ( 9, 8, 9, FALSE),
     ( 10, 8, 10, FALSE);
 
-MERGE INTO PUBLIC."rating" VALUES
+MERGE INTO rating VALUES
     ( 1, 'G'),
     ( 2, 'PG'),
     ( 3, 'PG-13'),
     ( 4, 'R'),
     ( 5, 'NC-17');
 
-MERGE INTO PUBLIC."genre" VALUES
+MERGE INTO genre VALUES
     ( 1, 'Комедия' ),
     ( 2, 'Драма' ),
     ( 3, 'Мультфильм' ),
@@ -37,7 +37,7 @@ MERGE INTO PUBLIC."genre" VALUES
     ( 5, 'Документальный' ),
     ( 6, 'Боевик' );
 
-MERGE INTO PUBLIC."film" VALUES
+MERGE INTO film VALUES
     ( 1, 'Король Лев',  'desc', '1994-10-10', 88, 1),
     ( 2, 'Аладдин',  'desc', '1992-10-10', 90, 1),
     ( 3, 'Улика',  'desc', '1985-04-10', 94, 2),
@@ -51,7 +51,7 @@ MERGE INTO PUBLIC."film" VALUES
     ( 11, 'Святая кровь',  'desc', '1989-10-10', 125, 5),
     ( 12, 'Трудная мишень',  'desc', '1993-10-10', 122, 5);
 
-MERGE INTO PUBLIC."film_genre" VALUES
+MERGE INTO film_genre VALUES
     (1, 1, 3),
     (2, 2, 3),
     (3, 3, 1),
@@ -64,7 +64,7 @@ MERGE INTO PUBLIC."film_genre" VALUES
     (10, 7, 2),
     (11, 12, 6);
 
-MERGE INTO PUBLIC."like" VALUES
+MERGE INTO likes VALUES
     ( 1, 1, 1 ),
     ( 2, 1, 2 ),
     ( 3, 1, 3 ),
