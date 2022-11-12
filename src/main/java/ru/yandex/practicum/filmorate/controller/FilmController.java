@@ -10,7 +10,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.ValidationService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
 import java.util.List;
@@ -48,7 +47,7 @@ public class FilmController {
             throw new ValidationException();
         }
 
-        return filmStorage.createFilm(film);
+        return filmService.createFilm(film);
     }
 
     /**
@@ -71,7 +70,7 @@ public class FilmController {
             throw new ValidationException();
         }
 
-        return filmStorage.updateFilm(film);
+        return filmService.updateFilm(film);
     }
 
     /**
