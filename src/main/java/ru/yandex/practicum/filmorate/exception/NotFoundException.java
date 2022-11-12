@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class NotFoundException extends Exception {
-    private final int id;
+    private final long id;
 }
