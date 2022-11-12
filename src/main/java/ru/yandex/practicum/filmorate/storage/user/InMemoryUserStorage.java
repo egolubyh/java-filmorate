@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class InMemoryUserStorage implements UserStorage {
-    private final Map<Integer, User> users = new HashMap<>();
+    private final Map<Long, User> users = new HashMap<>();
     private int id;
 
     @Override
@@ -20,6 +20,16 @@ public class InMemoryUserStorage implements UserStorage {
         users.put(user.getId(), user);
 
         return user;
+    }
+
+    @Override
+    public List<User> readAllFriends(long userId) {
+        return null;
+    }
+
+    @Override
+    public User readUser(long id) {
+        return users.get(id);
     }
 
     @Override
@@ -36,21 +46,20 @@ public class InMemoryUserStorage implements UserStorage {
         return user;
     }
 
-    public User findUserById(int id) {
-        return users.get(id);
-    }
 
-    public List<User> findAllFriendsUserById(int id) {
+
+    /*public List<User> findAllFriendsUserById(int id) {
         return users.get(id).getFriends().stream()
                 .map(users::get)
                 .collect(Collectors.toList());
-    }
-
-    public List<User> findAll() {
+    }*/
+    @Override
+    public List<User> readAllUsers() {
         return new ArrayList<>(users.values());
     }
 
-    public boolean idNotExist(int id) {
+    @Override
+    public boolean idNotExist(long id) {
         return !users.containsKey(id);
     }
 

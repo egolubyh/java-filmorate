@@ -1,9 +1,11 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.HashSet;
 import java.util.List;
@@ -12,11 +14,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService {
-    private final InMemoryUserStorage userStorage;
+    private final UserStorage userStorage;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public UserService(InMemoryUserStorage userStorage) {
+    public UserService(@Qualifier("userDbStorage") UserStorage userStorage, JdbcTemplate jdbcTemplate) {
         this.userStorage = userStorage;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     /**
@@ -24,12 +28,11 @@ public class UserService {
      * @param userId идентификатор пользователя.
      * @param friendId идентификатор друга.
      */
-    public void addFriend(int userId, int friendId) {
-        User user = userStorage.findUserById(userId);
-        User friend = userStorage.findUserById(friendId);
+    public void addFriend(long userId, long friendId) {
+        String sqlQuery = "INSERT INTO FRIENDS (FRIEND_ONE, FRIEND_TWO, CONFIRMED) " +
+                "VALUES (?, ?, ?)";
 
-        user.getFriends().add(friendId);
-        friend.getFriends().add(userId);
+        jdbcTemplate.update(sqlQuery, userId, friendId, false);
     }
 
     /**
@@ -38,11 +41,10 @@ public class UserService {
      * @param friendId идентификатор друга.
      */
     public void deleteFriend(int userId, int friendId) {
-        User user = userStorage.findUserById(userId);
-        User friend = userStorage.findUserById(friendId);
+        String sqlQuery = "DELETE FROM FRIENDS WHERE ID = (SELECT ID FROM FRIENDS " +
+                "WHERE FRIEND_ONE = " + userId + " AND FRIEND_TWO = " + friendId + ")";
 
-        user.getFriends().remove(friendId);
-        friend.getFriends().remove(userId);
+        jdbcTemplate.update(sqlQuery);
     }
 
     /**
@@ -51,13 +53,17 @@ public class UserService {
      * @param friendId идентификатор друга.
      * @return список общих друзей.
      */
-    public List<User> findAllMutualFriends(int userId, int friendId) {
-        Set<Integer> user = new HashSet<>(userStorage.findUserById(userId).getFriends());
-        Set<Integer> friends = new HashSet<>(userStorage.findUserById(friendId).getFriends());
+    public List<User> findAllMutualFriends(long userId, long friendId) {
+        Set<Long> user = userStorage.readAllFriends(userId)
+                .stream()
+                .map(User::getId).collect(Collectors.toSet());
+        Set<Long> friends = userStorage.readAllFriends(friendId)
+                .stream()
+                .map(User::getId).collect(Collectors.toSet());
 
         friends.retainAll(user);
         return friends.stream()
-                .map(userStorage::findUserById)
+                .map(userStorage::readUser)
                 .collect(Collectors.toList());
     }
 }

@@ -11,7 +11,7 @@ import java.util.Map;
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
 
-    private final Map<Integer, Film> films = new HashMap<>();
+    private final Map<Long, Film> films = new HashMap<>();
     private int id;
 
     @Override
@@ -20,6 +20,21 @@ public class InMemoryFilmStorage implements FilmStorage {
         films.put(film.getId(), film);
 
         return film;
+    }
+
+    @Override
+    public Film readFilm(long id) {
+        return films.get(id);
+    }
+
+    @Override
+    public List<Film> readAllFilms() {
+        return new ArrayList<>(films.values());
+    }
+
+    @Override
+    public boolean idNotExist(long id) {
+        return !films.containsKey(id);
     }
 
     @Override
@@ -36,15 +51,4 @@ public class InMemoryFilmStorage implements FilmStorage {
         return film;
     }
 
-    public Film findFilmById(int filmId) {
-        return films.get(filmId);
-    }
-
-    public List<Film> findAll() {
-        return new ArrayList<>(films.values());
-    }
-
-    public boolean idNotExist(int id) {
-        return !films.containsKey(id);
-    }
 }
