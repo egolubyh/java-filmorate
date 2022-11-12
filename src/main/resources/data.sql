@@ -10,7 +10,7 @@ ALTER TABLE FRIENDS ALTER COLUMN ID RESTART WITH 1;
 ALTER TABLE USERS ALTER COLUMN ID RESTART WITH 1;
 ALTER TABLE FILM ALTER COLUMN ID RESTART WITH 1;
 
-MERGE INTO RATING
+MERGE INTO MPA
     VALUES ( 1, 'G'),
            ( 2, 'PG'),
            ( 3, 'PG-13'),
@@ -25,6 +25,7 @@ MERGE INTO GENRE
            ( 5, 'Документальный' ),
            ( 6, 'Боевик' );
 
+/*
 INSERT INTO USERS (NAME, LOGIN, EMAIL, BIRTHDAY)
     VALUES ('Алексей', 'alex', 'alex@mail.com', '1991-01-01'),
            ('Егор', 'egor', 'egor@mail.com', '1992-02-02'),
@@ -49,19 +50,19 @@ INSERT INTO FRIENDS (FRIEND_ONE, FRIEND_TWO, CONFIRMED)
            (8, 9, FALSE),
            (8, 10, FALSE);
 
-INSERT INTO FILM (TITLE, DESCRIPTION, RELEASE_DATE, DURATION, RATING)
-    VALUES ('Король Лев',  'desc', '1994-10-10', 88, 1),
-           ('Аладдин',  'desc', '1992-10-10', 90, 1),
-           ('Улика',  'desc', '1985-04-10', 94, 2),
-           ('Контакт',  'desc', '1997-04-10', 150, 2),
-           ('Начало',  'desc', '2010-11-10', 148, 3),
-           ('Престиж',  'desc', '2006-10-10', 125, 3),
-           ('Титаник',  'desc', '1997-10-10', 194, 3),
-           ('Леон',  'desc', '1994-10-10', 133, 4),
-           ('Бойцовский клуб',  'desc', '1999-10-10', 139, 4),
-           ('Остров проклятых',  'desc', '2009-10-10', 138, 4),
-           ('Святая кровь',  'desc', '1989-10-10', 125, 5),
-           ('Трудная мишень',  'desc', '1993-10-10', 122, 5);
+INSERT INTO FILM (NAME, DESCRIPTION, RELEASEDATE, DURATION, RATE, MPA)
+    VALUES ('Король Лев',  'desc', '1994-10-10', 88, 4, 1),
+           ('Аладдин',  'desc', '1992-10-10', 90, 4, 1),
+           ('Улика',  'desc', '1985-04-10', 94, 4, 2),
+           ('Контакт',  'desc', '1997-04-10', 150, 4, 2),
+           ('Начало',  'desc', '2010-11-10', 148, 4, 3),
+           ('Престиж',  'desc', '2006-10-10', 125, 4, 3),
+           ('Титаник',  'desc', '1997-10-10', 194, 4, 3),
+           ('Леон',  'desc', '1994-10-10', 133, 4, 4),
+           ('Бойцовский клуб',  'desc', '1999-10-10', 139, 4, 4),
+           ('Остров проклятых',  'desc', '2009-10-10', 138, 4, 4),
+           ('Святая кровь',  'desc', '1989-10-10', 125, 4, 5),
+           ('Трудная мишень',  'desc', '1993-10-10', 122, 4, 5);
 
 INSERT INTO FILM_GENRE (FILM, GENRE)
     VALUES (1, 3),
@@ -91,3 +92,4 @@ INSERT INTO LIKES (USER_ID, FILM_ID)
            (7, 12 ),
            (8, 12 ),
            (9, 12 );
+*/
