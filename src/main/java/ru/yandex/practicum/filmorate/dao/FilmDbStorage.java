@@ -51,10 +51,6 @@ public class FilmDbStorage implements FilmStorage {
 
         film.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
 
-        if (film.getGenres() != null) {
-            genreDbStorage.createFilmGenre(film.getId(), film.getGenres());
-        }
-
         return film;
     }
 
@@ -87,16 +83,6 @@ public class FilmDbStorage implements FilmStorage {
                 film.getRate(),
                 film.getMpa().getId(),
                 film.getId());
-
-        if (film.getGenres() != null) {
-            List<Genre> list = film.getGenres()
-                    .stream()
-                    .distinct()
-                    .collect(Collectors.toList());
-            film.setGenres(list);
-            genreDbStorage.deleteFilmGenre(film.getId());
-            genreDbStorage.createFilmGenre(film.getId(), list);
-        }
 
         return film;
     }
