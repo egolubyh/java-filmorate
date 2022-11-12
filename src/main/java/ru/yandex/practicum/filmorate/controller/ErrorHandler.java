@@ -19,7 +19,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNotFoundException(final NotFoundException e) {
-        return "Произошла ошибка, переданный id = " + e.getId() + "не существует.";
+        return "Произошла ошибка, переданный id = " + e.getId() + " не существует.";
     }
 
     @ExceptionHandler
