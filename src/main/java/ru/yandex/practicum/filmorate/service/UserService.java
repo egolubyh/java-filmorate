@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.dao.FriendsDbStorage;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,11 +15,13 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
     private final UserStorage userStorage;
+    private final FriendsDbStorage friendsDbStorage;
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public UserService(@Qualifier("userDbStorage") UserStorage userStorage, JdbcTemplate jdbcTemplate) {
+    public UserService(@Qualifier("userDbStorage") UserStorage userStorage, FriendsDbStorage friendsDbStorage, JdbcTemplate jdbcTemplate) {
         this.userStorage = userStorage;
+        this.friendsDbStorage = friendsDbStorage;
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -29,10 +31,7 @@ public class UserService {
      * @param friendId идентификатор друга.
      */
     public void addFriend(long userId, long friendId) {
-        String sqlQuery = "INSERT INTO FRIENDS (FRIEND_ONE, FRIEND_TWO, CONFIRMED) " +
-                "VALUES (?, ?, ?)";
-
-        jdbcTemplate.update(sqlQuery, userId, friendId, false);
+        friendsDbStorage.createFriendship(userId,friendId);
     }
 
     /**
@@ -41,10 +40,7 @@ public class UserService {
      * @param friendId идентификатор друга.
      */
     public void deleteFriend(int userId, int friendId) {
-        String sqlQuery = "DELETE FROM FRIENDS WHERE ID = (SELECT ID FROM FRIENDS " +
-                "WHERE FRIEND_ONE = " + userId + " AND FRIEND_TWO = " + friendId + ")";
-
-        jdbcTemplate.update(sqlQuery);
+        friendsDbStorage.deleteFriendship(userId,friendId);
     }
 
     /**
