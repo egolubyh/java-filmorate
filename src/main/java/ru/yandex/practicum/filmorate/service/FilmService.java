@@ -86,6 +86,7 @@ public class FilmService {
                 .map(filmStorage::readFilm)
                 .collect(Collectors.toList());
     }
+
     private void setGenres(Film film) {
         if (film.getGenres() != null) {
             List<Genre> list = film.getGenres()
