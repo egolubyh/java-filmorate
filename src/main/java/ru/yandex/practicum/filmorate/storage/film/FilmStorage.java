@@ -13,7 +13,7 @@ public interface FilmStorage {
 
     Film updateFilm(Film film);
 
-    Film deleteFilm(Film film);
+    void deleteFilm(long id);
 
     boolean idNotExist(long id);
 }

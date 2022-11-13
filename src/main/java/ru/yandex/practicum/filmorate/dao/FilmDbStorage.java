@@ -105,15 +105,13 @@ public class FilmDbStorage implements FilmStorage {
 
     /**
      * Удаление записи о фильме
-     * @param film фильм который нужно удалить из базы данных
-     * @return фильм, который был удален
+     * @param id фильм который нужно удалить из базы данных
      */
     @Override
-    public Film deleteFilm(Film film) {
+    public void deleteFilm(long id) {
         String sqlQuery = "DELETE FROM FILM WHERE ID = ?";
 
-        jdbcTemplate.update(sqlQuery, film.getId());
-        return film;
+        jdbcTemplate.update(sqlQuery, id);
     }
 
     /**

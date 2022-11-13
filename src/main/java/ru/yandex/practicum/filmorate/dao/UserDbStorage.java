@@ -111,15 +111,13 @@ public class UserDbStorage implements UserStorage {
 
     /**
      * Удаление пользователя из базы данных
-     * @param user пользователь
-     * @return удаленный пользователь
+     * @param id пользователя
      */
     @Override
-    public User deleteUser(User user) {
+    public void deleteUser(long id) {
         String sqlQuery = "DELETE FROM USERS WHERE ID = ?";
 
-        jdbcTemplate.update(sqlQuery, user.getId());
-        return user;
+        jdbcTemplate.update(sqlQuery, id);
     }
 
     /**

@@ -13,7 +13,7 @@ public interface UserStorage {
 
     User updateUser(User user);
 
-    User deleteUser(User user);
+    void deleteUser(long id);
 
     List<User> readAllUsers();
 
