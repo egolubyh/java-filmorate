@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS friends (
     friend_two BIGINT NOT NULL ,
     confirmed BOOLEAN NOT NULL ,
     CONSTRAINT friend_pk PRIMARY KEY (id),
-    CONSTRAINT friend_one_fk FOREIGN KEY (friend_one) REFERENCES users (id),
-    CONSTRAINT friend_two_fk FOREIGN KEY (friend_two) REFERENCES users (id)
+    CONSTRAINT friend_one_fk FOREIGN KEY (friend_one) REFERENCES users (id) ON DELETE CASCADE ,
+    CONSTRAINT friend_two_fk FOREIGN KEY (friend_two) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS mpa (
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS film_genre (
     film BIGINT NOT NULL ,
     genre BIGINT NOT NULL ,
     CONSTRAINT film_genre_pk PRIMARY KEY (id),
-    CONSTRAINT film_fk FOREIGN KEY (film) REFERENCES film (id),
+    CONSTRAINT film_fk FOREIGN KEY (film) REFERENCES film (id) ON DELETE CASCADE ,
     CONSTRAINT genre_fk FOREIGN KEY (genre) REFERENCES genre (id)
 );
 
@@ -55,8 +55,8 @@ CREATE TABLE IF NOT EXISTS likes (
     user_id BIGINT NOT NULL ,
     film_id BIGINT NOT NULL ,
     CONSTRAINT like_pk PRIMARY KEY (id),
-    CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES users (id),
-    CONSTRAINT film_id_fk FOREIGN KEY (film_id) REFERENCES film (id)
+    CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ,
+    CONSTRAINT film_id_fk FOREIGN KEY (film_id) REFERENCES film (id) ON DELETE CASCADE
  );
 
 
