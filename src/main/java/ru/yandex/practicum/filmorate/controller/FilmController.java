@@ -10,7 +10,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.ValidationService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
 import java.util.List;
 
@@ -20,16 +19,13 @@ public class FilmController {
 
     private final FilmStorage filmStorage;
     private final FilmService filmService;
-    private final InMemoryUserStorage userStorage;
     private final ValidationService validationService;
     @Autowired
     public FilmController(@Qualifier("filmDbStorage") FilmStorage filmStorage,
                           FilmService filmService,
-                          InMemoryUserStorage userStorage,
                           ValidationService validationService) {
         this.filmStorage = filmStorage;
         this.filmService = filmService;
-        this.userStorage = userStorage;
         this.validationService = validationService;
     }
 
