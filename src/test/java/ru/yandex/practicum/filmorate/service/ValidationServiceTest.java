@@ -6,7 +6,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,19 +20,47 @@ class ValidationServiceTest {
 
     @Test
     void shouldBeTrueValidUser() {
-         final User user = new User(0,"mail@yandex.ru","log","name", LocalDate.now(),new HashSet<>());
+        final User user = new User();
+        user.setId(0);
+        user.setEmail("mail@yandex.ru");
+        user.setName("name");
+        user.setLogin("log");
+        user.setBirthday(LocalDate.now());
 
-         final boolean actual = service.isValid(user);
+        final boolean actual = service.isValid(user);
 
         assertTrue(actual);
     }
 
     @Test
     void shouldBeFalseNullUserFields() {
-        final User user1 = new User(-1,"mail@yandex.ru","log","name", LocalDate.now(),new HashSet<>());
-        final User user2 = new User(0,null,"log","name", LocalDate.now(),new HashSet<>());
-        final User user3 = new User(0,"mail@yandex.ru",null,"name", LocalDate.now(),new HashSet<>());
-        final User user4 = new User(0,"mail@yandex.ru","log","name", null,new HashSet<>());
+        final User user1 = new User();
+        user1.setId(-1);
+        user1.setEmail("mail@yandex.ru");
+        user1.setName("name");
+        user1.setLogin("log");
+        user1.setBirthday(LocalDate.now());
+
+        final User user2 = new User();
+        user2.setId(0);
+        user2.setEmail(null);
+        user2.setName("name");
+        user2.setLogin("log");
+        user2.setBirthday(LocalDate.now());
+
+        final User user3 = new User();
+        user3.setId(0);
+        user3.setEmail("mail@yandex.ru");
+        user3.setName("name");
+        user3.setLogin(null);
+        user3.setBirthday(LocalDate.now());
+
+        final User user4 = new User();
+        user4.setId(0);
+        user4.setEmail("mail@yandex.ru");
+        user4.setName("name");
+        user4.setLogin("log");
+        user4.setBirthday(null);
 
         final boolean actual1 = service.isValid(user1);
         final boolean actual2 = service.isValid(user2);
@@ -48,8 +75,19 @@ class ValidationServiceTest {
 
     @Test
     void shouldBeFalseInvalidUserEmail() {
-        final User user1 = new User(0,"","log","name", LocalDate.now(),new HashSet<>());
-        final User user2 = new User(0,"without","log","name", LocalDate.now(),new HashSet<>());
+        final User user1 = new User();
+        user1.setId(0);
+        user1.setEmail("");
+        user1.setName("name");
+        user1.setLogin("log");
+        user1.setBirthday(LocalDate.now());
+
+        final User user2 = new User();
+        user2.setId(0);
+        user2.setEmail("without");
+        user2.setName("name");
+        user2.setLogin("");
+        user2.setBirthday(LocalDate.now());
 
         final boolean actual1 = service.isValid(user1);
         final boolean actual2 = service.isValid(user2);
@@ -60,8 +98,19 @@ class ValidationServiceTest {
 
     @Test
     void shouldBeFalseInvalidUserLogin() {
-        final User user1 = new User(0,"mail@yandex.ru","","name", LocalDate.now(),new HashSet<>());
-        final User user2 = new User(0,"mail@yandex.ru"," ","name", LocalDate.now(),new HashSet<>());
+        final User user1 = new User();
+        user1.setId(0);
+        user1.setEmail("mail@yandex.ru");
+        user1.setName("name");
+        user1.setLogin("");
+        user1.setBirthday(LocalDate.now());
+
+        final User user2 = new User();
+        user2.setId(0);
+        user2.setEmail("mail@yandex.ru");
+        user2.setName("name");
+        user2.setLogin(" ");
+        user2.setBirthday(LocalDate.now());
 
         final boolean actual1 = service.isValid(user1);
         final boolean actual2 = service.isValid(user2);
@@ -72,8 +121,19 @@ class ValidationServiceTest {
 
     @Test
     void shouldBeFalseInvalidUserName() {
-        final User user1 = new User(0,"mail@yandex.ru","log","", LocalDate.now(),new HashSet<>());
-        final User user2 = new User(0,"mail@yandex.ru","log",null, LocalDate.now(),new HashSet<>());
+        final User user1 = new User();
+        user1.setId(0);
+        user1.setEmail("mail@yandex.ru");
+        user1.setName("");
+        user1.setLogin("log");
+        user1.setBirthday(LocalDate.now());
+
+        final User user2 = new User();
+        user2.setId(0);
+        user2.setEmail("mail@yandex.ru");
+        user2.setName(null);
+        user2.setLogin("log");
+        user2.setBirthday(LocalDate.now());
 
         final boolean actual1 = service.isValid(user1);
         final boolean actual2 = service.isValid(user2);
@@ -85,7 +145,12 @@ class ValidationServiceTest {
 
     @Test
     void shouldBeFalseInvalidUserBirthday() {
-        final User user = new User(0,"mail@yandex.ru","log","name", LocalDate.now().plusDays(1),new HashSet<>());
+        final User user = new User();
+        user.setId(0);
+        user.setEmail("mail@yandex.ru");
+        user.setName("name");
+        user.setLogin("log");
+        user.setBirthday(LocalDate.now().plusDays(1));
 
         final boolean actual = service.isValid(user);
 
@@ -94,7 +159,12 @@ class ValidationServiceTest {
 
     @Test
     void shouldBeTrueValidFilm() {
-        final Film film = new Film(0,"name","desc",LocalDate.now(),120,new HashSet<>());
+        final Film film = new Film();
+        film.setId(0);
+        film.setName("name");
+        film.setDescription("desc");
+        film.setReleaseDate(LocalDate.now());
+        film.setDuration(120);
 
         final boolean actual = service.isValid(film);
 
@@ -103,28 +173,50 @@ class ValidationServiceTest {
 
     @Test
     void shouldBeFalseNullFilmFields() {
-        final Film film1 = new Film(-1,"name","desc",LocalDate.now(),120,new HashSet<>());
-        final Film film2 = new Film(0,null,"desc",LocalDate.now(),120,new HashSet<>());
-        final Film film3 = new Film(0,"name",null,LocalDate.now(),120,new HashSet<>());
-        final Film film4 = new Film(0,"name","desc",null,120,new HashSet<>());
-        final Film film5 = new Film(0,"name","desc",LocalDate.now(),null,new HashSet<>());
+        final Film film1 = new Film();
+        film1.setId(-1);
+        film1.setName("name");
+        film1.setDescription("desc");
+        film1.setReleaseDate(LocalDate.now());
+        film1.setDuration(120);
+        final Film film2 = new Film();
+        film2.setId(0);
+        film2.setName(null);
+        film2.setDescription("desc");
+        film2.setReleaseDate(LocalDate.now());
+        film2.setDuration(120);
+        final Film film3 = new Film();
+        film3.setId(0);
+        film3.setName("name");
+        film3.setDescription(null);
+        film3.setReleaseDate(LocalDate.now());
+        film3.setDuration(120);
+        final Film film4 = new Film();
+        film4.setId(0);
+        film4.setName("name");
+        film4.setDescription("desc");
+        film4.setReleaseDate(null);
+        film4.setDuration(120);
 
         final boolean actual1 = service.isValid(film1);
         final boolean actual2 = service.isValid(film2);
         final boolean actual3 = service.isValid(film3);
         final boolean actual4 = service.isValid(film4);
-        final boolean actual5 = service.isValid(film5);
 
         assertFalse(actual1);
         assertFalse(actual2);
         assertFalse(actual3);
         assertFalse(actual4);
-        assertFalse(actual5);
     }
 
     @Test
     void shouldBeFalseInvalidFilmName() {
-        final Film film = new Film(0,"","desc",LocalDate.now(),120,new HashSet<>());
+        final Film film = new Film();
+        film.setId(0);
+        film.setName("");
+        film.setDescription("desc");
+        film.setReleaseDate(LocalDate.now());
+        film.setDuration(120);
 
         final boolean actual = service.isValid(film);
 
@@ -133,7 +225,12 @@ class ValidationServiceTest {
 
     @Test
     void shouldBeFalseInvalidFilmDescription() {
-        final Film film = new Film(0,"name",String.format("%201s","s"),LocalDate.now(),120,new HashSet<>());
+        final Film film = new Film();
+        film.setId(0);
+        film.setName("name");
+        film.setDescription(String.format("%201s","s"));
+        film.setReleaseDate(LocalDate.now());
+        film.setDuration(120);
 
         final boolean actual = service.isValid(film);
 
@@ -142,7 +239,12 @@ class ValidationServiceTest {
 
     @Test
     void shouldBeFalseInvalidFilmReleaseDate() {
-        final Film film = new Film(0,"name","desc",LocalDate.of(1895,12,27),120,new HashSet<>());
+        final Film film = new Film();
+        film.setId(0);
+        film.setName("name");
+        film.setDescription("desc");
+        film.setReleaseDate(LocalDate.of(1895,12,27));
+        film.setDuration(120);
 
         final boolean actual = service.isValid(film);
 
@@ -151,7 +253,12 @@ class ValidationServiceTest {
 
     @Test
     void shouldBeFalseInvalidFilmDuration() {
-        final Film film = new Film(0,"name","desc",LocalDate.now(),-1,new HashSet<>());
+        final Film film = new Film();
+        film.setId(0);
+        film.setName("name");
+        film.setDescription("desc");
+        film.setReleaseDate(LocalDate.now());
+        film.setDuration(-1);
 
         final boolean actual = service.isValid(film);
 
