@@ -83,10 +83,10 @@ class UserDbStorageTest {
 
     @Test
     void deleteUser() {
-        userDbStorage.deleteUser(5);
+        userDbStorage.deleteUser(11);
 
         assertEquals(10, userDbStorage.readAllUsers().size());
-        assertTrue(userDbStorage.idNotExist(5));
+        assertTrue(userDbStorage.idNotExist(11));
     }
 
     @Test
