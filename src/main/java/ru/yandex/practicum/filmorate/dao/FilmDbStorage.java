@@ -29,7 +29,11 @@ public class FilmDbStorage implements FilmStorage {
         this.mpaDbStorage = mpaDbStorage;
     }
 
-
+    /**
+     * Сохранить фильм в базе данных
+     * @param film фильм
+     * @return фильм
+     */
     @Override
     public Film createFilm(Film film) {
         String sqlQuery = "INSERT INTO FILM (NAME, DESCRIPTION, RELEASEDATE, DURATION, RATE, MPA) " +
@@ -52,6 +56,11 @@ public class FilmDbStorage implements FilmStorage {
         return film;
     }
 
+    /**
+     * Получить фильм
+     * @param id идентификатор фильма
+     * @return фильм
+     */
     @Override
     public Film readFilm(long id) {
         String sqlQuery = "SELECT ID, NAME, DESCRIPTION, RELEASEDATE, DURATION, RATE, MPA " +
@@ -60,6 +69,10 @@ public class FilmDbStorage implements FilmStorage {
         return jdbcTemplate.queryForObject(sqlQuery, this::mapRowToFilm, id);
     }
 
+    /**
+     * Получить все имеющиеся фильмы в базе данных
+     * @return список фильмов
+     */
     @Override
     public List<Film> readAllFilms() {
         String sqlQuery = "SELECT ID, NAME, DESCRIPTION, RELEASEDATE, DURATION, RATE, MPA " +
@@ -68,6 +81,11 @@ public class FilmDbStorage implements FilmStorage {
         return jdbcTemplate.query(sqlQuery, this::mapRowToFilm);
     }
 
+    /**
+     * Обновление информации о фильме
+     * @param film фильм с обновленной информацией
+     * @return фильм с обновленной информацией
+     */
     @Override
     public Film updateFilm(Film film) {
         String sqlQuery = "UPDATE FILM SET " +
@@ -85,6 +103,11 @@ public class FilmDbStorage implements FilmStorage {
         return film;
     }
 
+    /**
+     * Удаление записи о фильме
+     * @param film фильм который нужно удалить из базы данных
+     * @return фильм, который был удален
+     */
     @Override
     public Film deleteFilm(Film film) {
         String sqlQuery = "DELETE FROM FILM WHERE ID = ?";
@@ -93,6 +116,11 @@ public class FilmDbStorage implements FilmStorage {
         return film;
     }
 
+    /**
+     * Проверяет существование идентификатора
+     * @param id идентификатор фильма
+     * @return результат условия
+     */
     @Override
     public boolean idNotExist(long id) {
         String sqlQuery = "SELECT EXISTS(SELECT * FROM FILM WHERE ID = ?)";

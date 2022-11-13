@@ -13,6 +13,11 @@ public class FriendsDbStorage {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Добавить запись о дружбе в базу данных
+     * @param userId идентификатор пользователя, который добавляет друга
+     * @param friendId идентификатор друга, которого добавляет пользователь
+     */
     public void createFriendship(long userId, long friendId) {
         String sqlQuery = "INSERT INTO FRIENDS (FRIEND_ONE, FRIEND_TWO, CONFIRMED) " +
                 "VALUES (?, ?, ?)";
@@ -20,6 +25,11 @@ public class FriendsDbStorage {
         jdbcTemplate.update(sqlQuery, userId, friendId, false);
     }
 
+    /**
+     * Удалить запись о дружбе в базу данных
+     * @param userId идентификатор пользователя, который добавляет друга
+     * @param friendId идентификатор друга, которого добавляет пользователь
+     */
     public void deleteFriendship(long userId, long friendId) {
         String sqlQuery = "DELETE FROM FRIENDS WHERE ID = (SELECT ID FROM FRIENDS " +
                 "WHERE FRIEND_ONE = ? AND FRIEND_TWO = ?)";
