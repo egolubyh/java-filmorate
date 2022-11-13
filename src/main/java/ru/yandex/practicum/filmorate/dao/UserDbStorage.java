@@ -97,7 +97,6 @@ public class UserDbStorage implements UserStorage {
     public boolean idNotExist(long id) {
         String sqlQuery = "SELECT EXISTS(SELECT * FROM USERS WHERE ID = ?)";
 
-        return Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery,
-                new Object[]{id}, Boolean.class));
+        return Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery, Boolean.class, id));
     }
 }

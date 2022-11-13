@@ -6,7 +6,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.sql.Date;
@@ -15,7 +14,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Component
 public class FilmDbStorage implements FilmStorage {
@@ -99,8 +97,7 @@ public class FilmDbStorage implements FilmStorage {
     public boolean idNotExist(long id) {
         String sqlQuery = "SELECT EXISTS(SELECT * FROM FILM WHERE ID = ?)";
 
-        return Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery,
-                new Object[]{id}, Boolean.class));
+        return Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery, Boolean.class, id));
     }
 
     private Film mapRowToFilm(ResultSet rs, int rowNum) throws SQLException {

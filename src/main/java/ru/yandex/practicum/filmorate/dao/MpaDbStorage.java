@@ -35,7 +35,6 @@ public class MpaDbStorage {
         if (id <= 0) return true;
         String sqlQuery = "SELECT EXISTS(SELECT * FROM MPA WHERE ID = ?)";
 
-        return Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery,
-                new Object[]{id}, Boolean.class));
+        return Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery, Boolean.class, id));
     }
 }
