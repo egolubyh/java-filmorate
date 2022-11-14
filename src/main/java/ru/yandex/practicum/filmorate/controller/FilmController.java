@@ -40,7 +40,7 @@ public class FilmController {
         log.info("Получен запрос к эндпоинту: /films, метод POST");
         if (!validationService.isValid(film)) {
             log.error("Ошибка валидации, недопустимые поля Film");
-            throw new ValidationException();
+            throw new ValidationException("Ошибка валидации, недопустимые поля Film");
         }
 
         return filmService.createFilm(film);
@@ -58,12 +58,12 @@ public class FilmController {
         log.info("Получен запрос к эндпоинту: /films, метод PUT");
         if (filmStorage.idNotExist(film.getId())) {
             log.error("Ошибка, фильма с таким id = " + film.getId() + " не существует.");
-            throw new NotFoundException(film.getId());
+            throw new NotFoundException(film.getId(), "Ошибка, фильма с таким не существует." );
         }
 
         if (!validationService.isValid(film)) {
             log.error("Ошибка валидации, недопустимые поля Film");
-            throw new ValidationException();
+            throw new ValidationException("Ошибка валидации, недопустимые поля Film");
         }
 
         return filmService.updateFilm(film);
@@ -92,7 +92,7 @@ public class FilmController {
         log.info("Получен запрос к эндпоинту: /films/{id}, метод GET");
         if (filmStorage.idNotExist(id)) {
             log.error("Ошибка, фильма с таким id = " + id + " не существует.");
-            throw new NotFoundException(id);
+            throw new NotFoundException(id, "Ошибка, фильма с таким не существует." );
         }
 
         return filmStorage.readFilm(id);
