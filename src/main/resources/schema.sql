@@ -8,11 +8,9 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS friends (
-    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY ,
     friend_one BIGINT NOT NULL ,
     friend_two BIGINT NOT NULL ,
     confirmed BOOLEAN NOT NULL ,
-    CONSTRAINT friend_pk PRIMARY KEY (id),
     CONSTRAINT friend_one_fk FOREIGN KEY (friend_one) REFERENCES users (id) ON DELETE CASCADE ,
     CONSTRAINT friend_two_fk FOREIGN KEY (friend_two) REFERENCES users (id) ON DELETE CASCADE
 );
@@ -42,10 +40,8 @@ CREATE TABLE IF NOT EXISTS genre (
 );
 
 CREATE TABLE IF NOT EXISTS film_genre (
-    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY ,
     film BIGINT NOT NULL ,
     genre BIGINT NOT NULL ,
-    CONSTRAINT film_genre_pk PRIMARY KEY (id),
     CONSTRAINT film_fk FOREIGN KEY (film) REFERENCES film (id) ON DELETE CASCADE ,
     CONSTRAINT genre_fk FOREIGN KEY (genre) REFERENCES genre (id)
 );
