@@ -31,8 +31,7 @@ public class FriendsDbStorage {
      * @param friendId идентификатор друга, которого добавляет пользователь
      */
     public void deleteFriendship(long userId, long friendId) {
-        String sqlQuery = "DELETE FROM FRIENDS WHERE ID = (SELECT ID FROM FRIENDS " +
-                "WHERE FRIEND_ONE = ? AND FRIEND_TWO = ?)";
+        String sqlQuery = "DELETE FROM FRIENDS WHERE FRIEND_ONE = ? AND FRIEND_TWO = ?";
 
         jdbcTemplate.update(sqlQuery, userId, friendId);
     }
