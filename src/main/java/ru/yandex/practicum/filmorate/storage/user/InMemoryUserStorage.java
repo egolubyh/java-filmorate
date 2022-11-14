@@ -43,13 +43,6 @@ public class InMemoryUserStorage implements UserStorage {
         users.remove(id);
     }
 
-
-
-    /*public List<User> findAllFriendsUserById(int id) {
-        return users.get(id).getFriends().stream()
-                .map(users::get)
-                .collect(Collectors.toList());
-    }*/
     @Override
     public List<User> readAllUsers() {
         return new ArrayList<>(users.values());
