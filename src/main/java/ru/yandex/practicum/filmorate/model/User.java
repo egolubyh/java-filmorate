@@ -1,21 +1,29 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
-    private int id;
-    private String email;
-    private String login;
+    /**
+     * Идентификатор пользователя
+     */
+    private long id;
+    /**
+     * Имя пользователя
+     */
     private String name;
+    /**
+     * Логин пользователя
+     */
+    private String login;
+    /**
+     * Адрес электронной почты пользователя
+     */
+    private String email;
+    /**
+     * Дата рождения пользователя
+     */
     private LocalDate birthday;
-    private Set<Integer> friends = new HashSet<>();
 }

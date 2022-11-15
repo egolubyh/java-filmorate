@@ -1,8 +1,11 @@
 package ru.yandex.practicum.filmorate.exception;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Data
+@Getter
+@AllArgsConstructor
 public class NotFoundException extends Exception {
-    private final int id;
+    private final long id;
+    private final String message;
 }

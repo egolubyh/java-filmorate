@@ -6,6 +6,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
+
 @Service
 public class ValidationService {
 
@@ -17,7 +18,7 @@ public class ValidationService {
     public boolean isValid(Film film) {
         if (film.getId() < 0) return false;
         if (film.getName() == null || film.getDescription() == null
-                || film.getReleaseDate() == null || film.getDuration() == null) return false;
+                || film.getReleaseDate() == null ) return false;
         if (film.getName().isEmpty()) return false;
         if (film.getDescription().length() > 200) return false;
         if (film.getReleaseDate().isBefore(LocalDate.of(1895,12,28))) return false;
