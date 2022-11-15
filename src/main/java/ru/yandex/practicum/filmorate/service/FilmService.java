@@ -3,9 +3,7 @@ package ru.yandex.practicum.filmorate.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.dao.GenreDbStorage;
-import ru.yandex.practicum.filmorate.dao.LikeDbStorage;
-import ru.yandex.practicum.filmorate.dao.MpaDbStorage;
+import ru.yandex.practicum.filmorate.dao.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
@@ -17,19 +15,18 @@ import java.util.stream.Collectors;
 @Service
 public class FilmService {
 
-
     private final FilmStorage filmStorage;
     private final LikeDbStorage likeDbStorage;
-    private final GenreDbStorage genreDbStorage;
     private final MpaDbStorage mpaDbStorage;
+    private final FilmGenreDbStorage filmGenreDbStorage;
 
     @Autowired
     public FilmService(@Qualifier("filmDbStorage") FilmStorage filmStorage,
-                       LikeDbStorage likeDbStorage, GenreDbStorage genreDbStorage, MpaDbStorage mpaDbStorage) {
+                       LikeDbStorage likeDbStorage, MpaDbStorage mpaDbStorage, FilmGenreDbStorage filmGenreDbStorage) {
         this.filmStorage = filmStorage;
         this.likeDbStorage = likeDbStorage;
-        this.genreDbStorage = genreDbStorage;
         this.mpaDbStorage = mpaDbStorage;
+        this.filmGenreDbStorage = filmGenreDbStorage;
     }
 
     /**
@@ -94,8 +91,11 @@ public class FilmService {
                     .distinct()
                     .collect(Collectors.toList());
             film.setGenres(list);
-            genreDbStorage.deleteFilmGenre(film.getId());
-            genreDbStorage.createFilmGenre(film.getId(), list);
+            filmGenreDbStorage.deleteFilmGenre(film.getId());
+            filmGenreDbStorage.createFilmGenre(film.getId(),
+                    list.stream()
+                    .map(Genre::getId)
+                    .collect(Collectors.toList()));
         }
     }
 

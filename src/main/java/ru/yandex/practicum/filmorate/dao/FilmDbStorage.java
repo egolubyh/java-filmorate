@@ -19,14 +19,15 @@ import java.util.Objects;
 public class FilmDbStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;
-    private final GenreDbStorage genreDbStorage;
     private final MpaDbStorage mpaDbStorage;
 
+    private final FilmGenreDbStorage filmGenreDbStorage;
+
     @Autowired
-    public FilmDbStorage(JdbcTemplate jdbcTemplate, GenreDbStorage genreDbStorage, MpaDbStorage mpaDbStorage) {
+    public FilmDbStorage(JdbcTemplate jdbcTemplate, MpaDbStorage mpaDbStorage, FilmGenreDbStorage filmGenreDbStorage) {
         this.jdbcTemplate = jdbcTemplate;
-        this.genreDbStorage = genreDbStorage;
         this.mpaDbStorage = mpaDbStorage;
+        this.filmGenreDbStorage = filmGenreDbStorage;
     }
 
     /**
@@ -138,7 +139,7 @@ public class FilmDbStorage implements FilmStorage {
         film.setDuration(rs.getInt("DURATION"));
         film.setRate(rs.getInt("RATE"));
         film.setMpa(mpaDbStorage.readMpa(mpaId));
-        film.setGenres(genreDbStorage.readAllGenre(filmId));
+        film.setGenres(filmGenreDbStorage.readAllFilmGenre(filmId));
 
         return film;
     }
