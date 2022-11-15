@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.List;
@@ -18,12 +19,9 @@ class GenreDbStorageTest {
     private final GenreDbStorage genreDbStorage;
 
     @Test
-    void createFilmGenre() {
-    }
-
-    @Test
-    void readGenre() {
-        Genre genres = genreDbStorage.readGenre(1);
+    void readGenre() throws NotFoundException {
+        Genre genres = genreDbStorage.readGenre(1)
+                .orElseThrow(() -> new NotFoundException(1,"Ошибка, жанра с таким id = " + 1 + " не существует."));
 
         assertEquals("Комедия", genres.getName());
     }
@@ -33,25 +31,5 @@ class GenreDbStorageTest {
         List<Genre> genres = genreDbStorage.readAllGenre();
 
         assertEquals(6, genres.size());
-    }
-
-    @Test
-    void testReadAllGenre() {
-        List<Genre> genres = genreDbStorage.readAllGenre(1);
-
-        assertEquals(1, genres.size());
-        assertEquals("Мультфильм", genres.get(0).getName());
-    }
-
-    @Test
-    void deleteFilmGenre() {
-        genreDbStorage.deleteFilmGenre(7);
-
-        assertTrue(genreDbStorage.idNotExist(7));
-    }
-
-    @Test
-    void idNotExist() {
-        assertTrue(genreDbStorage.idNotExist(999));
     }
 }
