@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.service.ValidationService;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.List;
@@ -40,8 +39,7 @@ public class UserController {
     public User createUser(@RequestBody User user) throws ValidationException {
         log.info("Получен запрос к эндпоинту: /users, метод POST");
         if (!validationService.isValid(user)) {
-            log.error("Ошибка валидации, недопустимые поля User");
-            throw new ValidationException();
+            throw new ValidationException("Ошибка валидации, недопустимые поля User");
         }
         return userStorage.createUser(user);
     }
@@ -56,13 +54,11 @@ public class UserController {
     public User updateUser(@RequestBody User user) throws Exception {
         log.info("Получен запрос к эндпоинту: /users, метод PUT");
         if (userStorage.idNotExist(user.getId())) {
-            log.error("Ошибка, пользователя с таким id = " + user.getId() + " не существует.");
-            throw new NotFoundException(user.getId());
+            throw new NotFoundException(user.getId(),"Ошибка, пользователя с таким id = " + user.getId() + " не существует.");
         }
 
         if (!validationService.isValid(user)) {
-            log.error("Ошибка валидации, недопустимые поля User");
-            throw new ValidationException();
+            throw new ValidationException("Ошибка валидации, недопустимые поля User");
         }
 
         return userStorage.updateUser(user);
@@ -79,12 +75,10 @@ public class UserController {
                            @PathVariable long friendId) throws NotFoundException {
         log.info("Получен запрос к эндпоинту: /users/{id}/friends/{friendId}, метод PUT");
         if (userStorage.idNotExist(id)) {
-            log.error("Ошибка, пользователя с таким id = " + id + " не существует.");
-            throw new NotFoundException(id);
+            throw new NotFoundException(id,"Ошибка, пользователя с таким id = " + id + " не существует.");
         }
         if (userStorage.idNotExist(friendId)) {
-            log.error("Ошибка, пользователя с таким id = " + friendId + " не существует.");
-            throw new NotFoundException(friendId);
+            throw new NotFoundException(friendId,"Ошибка, пользователя с таким id = " + friendId + " не существует.");
         }
 
         userService.addFriend(id,friendId);
@@ -101,12 +95,10 @@ public class UserController {
                               @PathVariable int friendId) throws NotFoundException {
         log.info("Получен запрос к эндпоинту: /users/{id}/friends/{friendId}, метод DELETE");
         if (userStorage.idNotExist(id)) {
-            log.error("Ошибка, пользователя с таким id = " + id + " не существует.");
-            throw new NotFoundException(id);
+            throw new NotFoundException(id,"Ошибка, пользователя с таким id = " + id + " не существует.");
         }
         if (userStorage.idNotExist(friendId)) {
-            log.error("Ошибка, пользователя с таким id = " + friendId + " не существует.");
-            throw new NotFoundException(friendId);
+            throw new NotFoundException(friendId,"Ошибка, пользователя с таким id = " + friendId + " не существует.");
         }
 
         userService.deleteFriend(id,friendId);
@@ -133,8 +125,7 @@ public class UserController {
     public User findUserById(@PathVariable long id) throws NotFoundException {
         log.info("Получен запрос к эндпоинту: /users/{id}, метод GET");
         if (userStorage.idNotExist(id)) {
-            log.error("Ошибка, пользователя с таким id = " + id + " не существует.");
-            throw new NotFoundException(id);
+            throw new NotFoundException(id,"Ошибка, пользователя с таким id = " + id + " не существует.");
         }
         return userStorage.readUser(id);
     }
@@ -149,15 +140,14 @@ public class UserController {
     public List<User> findAllFriendsUserById(@PathVariable long id) throws NotFoundException {
         log.info("Получен запрос к эндпоинту: /users/{id}/friends, метод GET");
         if (userStorage.idNotExist(id)) {
-            log.error("Ошибка, пользователя с таким id = " + id + "не существует.");
-            throw new NotFoundException(id);
+            throw new NotFoundException(id,"Ошибка, пользователя с таким id = " + id + "не существует.");
         }
 
         return userStorage.readAllFriends(id);
     }
 
     /**
-     * Получить список одщих друзей пользователя с другом.
+     * Получить список общих друзей пользователя с другом.
      * @param id идентификатор пользователя.
      * @param otherId идентификатор друга.
      * @return Список общих друзей.
@@ -168,13 +158,11 @@ public class UserController {
                            @PathVariable long otherId) throws NotFoundException {
         log.info("Получен запрос к эндпоинту: /users/{id}/friends/common/{otherId}, метод GET");
         if (userStorage.idNotExist(id)) {
-            log.error("Ошибка, пользователя с таким id = " + id + "не существует.");
-            throw new NotFoundException(id);
+            throw new NotFoundException(id,"Ошибка, пользователя с таким id = " + id + "не существует.");
         }
 
         if (userStorage.idNotExist(otherId)) {
-            log.error("Ошибка, пользователя с таким id = " + otherId + "не существует.");
-            throw new NotFoundException(otherId);
+            throw new NotFoundException(otherId,"Ошибка, пользователя с таким id = " + otherId + "не существует.");
         }
 
         return userService.findAllMutualFriends(id,otherId);

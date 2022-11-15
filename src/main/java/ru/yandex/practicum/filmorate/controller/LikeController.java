@@ -41,13 +41,11 @@ public class LikeController {
                         @PathVariable long userId)  throws NotFoundException {
         log.info("Получен запрос к эндпоинту: /films/{id}/like/{userId}, метод PUT");
         if (filmStorage.idNotExist(id)) {
-            log.error("Ошибка, фильма с таким id = " + id + " не существует.");
-            throw new NotFoundException(id);
+            throw new NotFoundException(id,"Ошибка, фильма с таким id = " + id + " не существует.");
         }
 
         if (userStorage.idNotExist(userId)) {
-            log.error("Ошибка, пользователя с таким id = " + userId + " не существует.");
-            throw new NotFoundException(userId);
+            throw new NotFoundException(userId,"Ошибка, пользователя с таким id = " + userId + " не существует.");
         }
 
         filmService.addLike(id,userId);
@@ -66,13 +64,11 @@ public class LikeController {
                            @PathVariable long userId)  throws NotFoundException {
         log.info("Получен запрос к эндпоинту: /films/{id}/like/{userId}, метод DELETE");
         if (filmStorage.idNotExist(id)) {
-            log.error("Ошибка, фильма с таким id = " + id + " не существует.");
-            throw new NotFoundException(id);
+            throw new NotFoundException(id,"Ошибка, фильма с таким id = " + id + " не существует.");
         }
 
         if (userStorage.idNotExist(userId)) {
-            log.error("Ошибка, пользователя с таким id = " + userId + " не существует.");
-            throw new NotFoundException(userId);
+            throw new NotFoundException(userId,"Ошибка, пользователя с таким id = " + userId + " не существует.");
         }
 
         filmService.deleteLike(id,userId);

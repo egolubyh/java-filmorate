@@ -43,8 +43,7 @@ public class MpaController {
     public Mpa findGenre(@PathVariable long id) throws NotFoundException {
         log.info("Получен запрос к эндпоинту: /mpa/{id}, метод GET");
         if (mpaDbStorage.idNotExist(id)) {
-            log.error("Ошибка, рейтинга с таким id = " + id + " не существует.");
-            throw new NotFoundException(id);
+            throw new NotFoundException(id,"Ошибка, рейтинга с таким id = " + id + " не существует.");
         }
         return mpaDbStorage.readMpa(id);
     }
