@@ -164,7 +164,7 @@ public class FilmDbStorage implements FilmStorage {
 
 
 
-    public Director mapRowToDirector(ResultSet resultSet, int rowNum) throws SQLException {
+    private Director mapRowToDirector(ResultSet resultSet, int rowNum) throws SQLException {
         return Director.builder()
                 .id((int) resultSet.getLong("id"))
                 .name(resultSet.getString("name"))
