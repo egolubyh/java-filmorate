@@ -5,13 +5,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,6 +51,23 @@ public class FilmDbStorage implements FilmStorage {
         }, keyHolder);
 
         film.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
+
+
+        if (film.getDirectors() != null) {
+            String sql = "insert into FILM_DIRECTOR values (?, ?)";
+            try (Connection connection = jdbcTemplate.getDataSource().getConnection();
+                 PreparedStatement ps = connection.prepareStatement(sql)) {
+                for (Director director : film.getDirectors()) {
+                    ps.setLong(1, film.getId());
+                    ps.setLong(2, director.getId());
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
 
         return film;
     }
@@ -140,7 +155,34 @@ public class FilmDbStorage implements FilmStorage {
         film.setRate(rs.getInt("RATE"));
         film.setMpa(mpaDbStorage.readMpa(mpaId));
         film.setGenres(filmGenreDbStorage.readAllFilmGenre(filmId));
+        film.setDirectors(findDirectorsByFilmId(filmId));
+
 
         return film;
     }
+
+
+
+
+    public Director mapRowToDirector(ResultSet resultSet, int rowNum) throws SQLException {
+        return Director.builder()
+                .id((int) resultSet.getLong("id"))
+                .name(resultSet.getString("name"))
+                .build();
+    }
+
+    public List<Director> findDirectorsByFilmId(Long id) {
+        String sqlQuery  = "select d.id, d.name\n" +
+                "from directors as d\n" +
+                "inner join film_director as fd on fd.director_id = d.id\n" +
+                "inner join film as f on f.id = fd.film_id\n" +
+                "where f.id =?";
+
+        return jdbcTemplate.query(sqlQuery, this::mapRowToDirector, id);
+    }
+
+
+
+
+
 }
