@@ -37,7 +37,9 @@ public class DirectorService {
         return directorStorage.findAllDirectors();
     }
 
-
+    public Director updateDirector(Director director) throws NotFoundException {
+        return directorStorage.updateDirector(director);
+    }
 
 
 }

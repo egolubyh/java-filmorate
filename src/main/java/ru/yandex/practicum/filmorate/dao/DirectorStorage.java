@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Director;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,6 +40,19 @@ public class DirectorStorage {
         director.setId((int) id);
         return director;
     }
+
+    public Director updateDirector(Director director) throws NotFoundException {
+        String sqlQuery = "update Directors set NAME = ?" +
+                "  where ID = ?";
+        jdbcTemplate.update(sqlQuery,
+                director.getName(),
+                director.getId());
+        return findDirectorById((long) director.getId());
+    }
+
+
+
+
 
 
 

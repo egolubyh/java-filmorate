@@ -29,6 +29,14 @@ public class DirectorController {
         return directorService.addDirector(director);
     }
 
+    @PutMapping("/directors")
+    public Director updateDirector(@RequestBody Director director) throws NotFoundException {
+        return directorService.updateDirector(director);
+    }
+
+
+
+
     @GetMapping("/directors/{id}")
     public Director findDirectorById(@PathVariable long id) throws NotFoundException {
         log.info("Получен запрос к эндпоинту: /directors/{id}, метод GET");
@@ -41,7 +49,5 @@ public class DirectorController {
 
         return directorService.findAllDirectors();
     }
-
-
 
 }
