@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.model.Director;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Objects;
 @Service
 public class DirectorService {
@@ -30,5 +31,13 @@ public class DirectorService {
     public Director findDirectorById(Long id) throws NotFoundException {
         return directorStorage.findDirectorById(id);
     }
+
+
+    public List<Director> findAllDirectors() {
+        return directorStorage.findAllDirectors();
+    }
+
+
+
 
 }

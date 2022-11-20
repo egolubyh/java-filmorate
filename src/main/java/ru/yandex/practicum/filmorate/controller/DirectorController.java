@@ -10,6 +10,8 @@ import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.DirectorService;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 public class DirectorController {
@@ -30,9 +32,16 @@ public class DirectorController {
     @GetMapping("/directors/{id}")
     public Director findDirectorById(@PathVariable long id) throws NotFoundException {
         log.info("Получен запрос к эндпоинту: /directors/{id}, метод GET");
-
-
         return directorService.findDirectorById(id);
     }
+
+    @GetMapping("/directors")
+    public List<Director> findAllFilms() {
+        log.info("Получен запрос к эндпоинту: /directors, метод GET");
+
+        return directorService.findAllDirectors();
+    }
+
+
 
 }

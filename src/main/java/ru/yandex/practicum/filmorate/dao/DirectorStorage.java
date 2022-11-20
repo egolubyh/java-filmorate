@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -51,6 +52,10 @@ public class DirectorStorage {
         return director;
     }
 
+    public List<Director> findAllDirectors() {
+        String sqlQuery = "select * from directors";
+        return jdbcTemplate.query(sqlQuery, this::mapRowToDirector);
+    }
 
 
     private Director mapRowToDirector(ResultSet resultSet, int rowNum) throws SQLException {
