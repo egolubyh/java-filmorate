@@ -107,21 +107,6 @@ public class FilmController {
         log.info("Получен запрос к эндпоинту: /films/popular, метод GET, RequestParam = {}",
                 allParams);
 
-        if (allParams.isEmpty()) {
-            return filmService.findMostPopularFilms(10);
-        } else if (allParams.containsKey("count")) {
-            return filmService.findMostPopularFilms(
-                    Integer.parseInt(allParams.get("count")));
-        } else if (allParams.containsKey("genreId") && allParams.containsKey("year")) {
-            return filmService.findMostPopularFilmsByGenreAndYear(
-                    Long.parseLong(allParams.get("genreId")),
-                    Integer.parseInt(allParams.get("year")));
-        } else if (allParams.containsKey("genreId")) {
-            return filmService.findMostPopularFilmsByGenre(
-                    Long.parseLong(allParams.get("genreId")));
-        } else {
-            return filmService.findMostPopularFilmsByYear(
-                    Integer.parseInt(allParams.get("year")));
-        }
+        return filmService.findMostPopular(allParams);
     }
 }

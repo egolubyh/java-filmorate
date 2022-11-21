@@ -20,7 +20,6 @@ public class FilmDbStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;
     private final MpaDbStorage mpaDbStorage;
-
     private final FilmGenreDbStorage filmGenreDbStorage;
 
     @Autowired
@@ -128,12 +127,28 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     /**
+     * Найти список наиболее популярных фильмов
+     * @param count максимальное кол-во фильмов
+     * @return список фильма
+     */
+    public List<Film> findMostPopularFilms(int count) {
+        String sql = "SELECT f.* " +
+                "FROM FILM AS f " +
+                "LEFT JOIN LIKES L on f.ID = L.FILM_ID " +
+                "GROUP BY f.ID " +
+                "ORDER BY COUNT(l.USER_ID) DESC " +
+                "LIMIT ?";
+
+        return jdbcTemplate.query(sql, this::mapRowToFilm, count);
+    }
+
+    /**
      * Найти список наиболее популярных фильмов по году
      * @param year год фильма
-     * @return список идентификаторов фильма
+     * @return список фильмов
      */
-    public List<Long> findMostPopularIdByYear(int year) {
-        String sql = "SELECT f.ID AS FILM_ID " +
+    public List<Film> findMostPopularFilmsByYear(int year) {
+        String sql = "SELECT f.* " +
                 "FROM FILM AS f " +
                 "JOIN FILM_GENRE AS FG on f.ID = FG.FILM " +
                 "LEFT JOIN LIKES L on f.ID = L.FILM_ID " +
@@ -141,16 +156,16 @@ public class FilmDbStorage implements FilmStorage {
                 "GROUP BY f.ID " +
                 "ORDER BY COUNT(l.USER_ID) DESC ";
 
-        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getLong("FILM_ID"), year);
+        return jdbcTemplate.query(sql, this::mapRowToFilm, year);
     }
 
     /**
      * Найти список наиболее популярных фильмов по жанру
      * @param genreId id жанра
-     * @return список идентификаторов фильма
+     * @return список фильмов
      */
-    public List<Long> findMostPopularIdByGenre(long genreId) {
-        String sql = "SELECT f.ID AS FILM_ID " +
+    public List<Film> findMostPopularFilmsByGenre(long genreId) {
+        String sql = "SELECT f.* " +
                 "FROM FILM AS f " +
                 "JOIN FILM_GENRE AS FG on f.ID = FG.FILM " +
                 "LEFT JOIN LIKES L on f.ID = L.FILM_ID " +
@@ -158,17 +173,17 @@ public class FilmDbStorage implements FilmStorage {
                 "GROUP BY f.ID " +
                 "ORDER BY COUNT(l.USER_ID) DESC ";
 
-        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getLong("FILM_ID"), genreId);
+        return jdbcTemplate.query(sql, this::mapRowToFilm, genreId);
     }
 
     /**
      * Найти список наиболее популярных фильмов по жанру и году
      * @param year год фильма
      * @param genreId жанр фильма
-     * @return список идентификаторов фильма
+     * @return список фильмов
      */
-    public List<Long> findMostPopularIdByYearAndGenre(long genreId, int year) {
-        String sql = "SELECT f.ID AS FILM_ID " +
+    public List<Film> findMostPopularFilmsByYearAndGenre(long genreId, int year) {
+        String sql = "SELECT f.* " +
                 "FROM FILM AS f " +
                 "JOIN FILM_GENRE AS FG on f.ID = FG.FILM " +
                 "LEFT JOIN LIKES L on f.ID = L.FILM_ID " +
@@ -176,8 +191,7 @@ public class FilmDbStorage implements FilmStorage {
                 "GROUP BY f.ID " +
                 "ORDER BY COUNT(l.USER_ID) DESC ";
 
-        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getLong("FILM_ID"),
-                year,genreId);
+        return jdbcTemplate.query(sql, this::mapRowToFilm, year, genreId);
     }
     private Film mapRowToFilm(ResultSet rs, int rowNum) throws SQLException {
         long filmId = rs.getLong("ID");

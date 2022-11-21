@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,47 +74,27 @@ public class FilmService {
 
     /**
      * Получить список популярных фильмов.
-     * @param count длинна списка.
+     * @param allParams Параметры запроса: count - максимальное кол-во возвращаемых фильмов,
+     * genreId - id жанр фильма, year - год релиза фильма.
      * @return список фильмов.
      */
-    public List<Film> findMostPopularFilms(int count) {
-        return likeDbStorage.findMostPopularId(count).stream()
-                .map(filmStorage::readFilm)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Получить список популярных фильмов указанного жанра.
-     * @param genreId жанр фильма.
-     * @return список фильмов.
-     */
-    public List<Film> findMostPopularFilmsByGenre(long genreId) {
-        return filmStorage.findMostPopularIdByGenre(genreId).stream()
-                .map(filmStorage::readFilm)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Получить список популярных фильмов указанного года.
-     * @param year год фильма.
-     * @return список фильмов.
-     */
-    public List<Film> findMostPopularFilmsByYear(int year) {
-        return filmStorage.findMostPopularIdByYear(year).stream()
-                .map(filmStorage::readFilm)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Получить список популярных фильмов указанного жанра и года.
-     * @param genreId жанр фильма
-     * @param year год фильма
-     * @return список фильмов.
-     */
-    public List<Film> findMostPopularFilmsByGenreAndYear(long genreId, int year) {
-        return filmStorage.findMostPopularIdByYearAndGenre(genreId,year).stream()
-                .map(filmStorage::readFilm)
-                .collect(Collectors.toList());
+    public List<Film> findMostPopular(Map<String, String> allParams) {
+        if (allParams.isEmpty()) {
+            return filmStorage.findMostPopularFilms(10);
+        } else if (allParams.containsKey("count")) {
+            return filmStorage.findMostPopularFilms(
+                    Integer.parseInt(allParams.get("count")));
+        } else if (allParams.containsKey("genreId") && allParams.containsKey("year")) {
+            return filmStorage.findMostPopularFilmsByYearAndGenre(
+                    Long.parseLong(allParams.get("genreId")),
+                    Integer.parseInt(allParams.get("year")));
+        } else if (allParams.containsKey("genreId")) {
+            return filmStorage.findMostPopularFilmsByGenre(
+                    Long.parseLong(allParams.get("genreId")));
+        } else {
+            return filmStorage.findMostPopularFilmsByYear(
+                    Integer.parseInt(allParams.get("year")));
+        }
     }
 
     private void setGenres(Film film) {
@@ -135,6 +116,4 @@ public class FilmService {
         Mpa mpa = mpaDbStorage.readMpa(film.getMpa().getId());
         film.setMpa(mpa);
     }
-
-
 }
