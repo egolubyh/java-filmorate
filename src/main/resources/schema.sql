@@ -55,5 +55,14 @@ CREATE TABLE IF NOT EXISTS likes (
     CONSTRAINT film_id_fk FOREIGN KEY (film_id) REFERENCES film (id) ON DELETE CASCADE
  );
 
+CREATE TABLE IF NOT EXISTS activity (
+    event_id   BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id    BIGINT      NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    event_type VARCHAR,
+    operation  VARCHAR,
+    entity_id  BIGINT,
+    timestamp  TIMESTAMP
+);
+
 
 
