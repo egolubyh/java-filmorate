@@ -4,29 +4,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.dao.*;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
 
-    private final FilmStorage filmStorage;
+    private final FilmDbStorage filmStorage;
     private final LikeDbStorage likeDbStorage;
     private final MpaDbStorage mpaDbStorage;
     private final FilmGenreDbStorage filmGenreDbStorage;
 
+    private final DirectorStorage directorStorage;
     @Autowired
-    public FilmService(@Qualifier("filmDbStorage") FilmStorage filmStorage,
-                       LikeDbStorage likeDbStorage, MpaDbStorage mpaDbStorage, FilmGenreDbStorage filmGenreDbStorage) {
+    public FilmService(@Qualifier("filmDbStorage") FilmDbStorage filmStorage,
+                       LikeDbStorage likeDbStorage, MpaDbStorage mpaDbStorage, FilmGenreDbStorage filmGenreDbStorage,DirectorStorage directorStorage) {
         this.filmStorage = filmStorage;
         this.likeDbStorage = likeDbStorage;
         this.mpaDbStorage = mpaDbStorage;
         this.filmGenreDbStorage = filmGenreDbStorage;
+        this. directorStorage=directorStorage;
     }
 
     /**
@@ -103,5 +107,25 @@ public class FilmService {
         Mpa mpa = mpaDbStorage.readMpa(film.getMpa().getId());
         film.setMpa(mpa);
     }
+
+
+    public List<Film> findFilmsByDirectorsId(Long id, String sort) throws SQLException, NotFoundException {
+
+if (sort == "likes") {
+    return filmStorage.findFilmsByDirectorsIdbyLike(id);
+}
+else return filmStorage.findFilmsByDirectorsIdbyYar(id);
+         //   case "likes"
+    }
+
+
+
+
+
+
+
+
+
+
 
 }

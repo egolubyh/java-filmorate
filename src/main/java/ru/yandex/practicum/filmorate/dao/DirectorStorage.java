@@ -32,7 +32,7 @@ public class DirectorStorage {
         String sqlQuery = "insert into DIRECTORS(NAME) values (?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sqlQuery,  Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(sqlQuery,   new String[]{"id"});
             ps.setString(1, director.getName());
             return ps;
         }, keyHolder);

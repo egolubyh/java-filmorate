@@ -11,6 +11,8 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.ValidationService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
+import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -107,4 +109,15 @@ public class FilmController {
 
         return filmService.findMostPopularFilms(count);
     }
+
+    @GetMapping("/films/director/{directorId}")
+    public Collection<Film> getFilmsByDirector(
+            @PathVariable Long directorId,
+            @RequestParam(required = false, defaultValue = "likes") String sortBy) throws SQLException, NotFoundException {
+        log.info("getFilmsByDirector");
+        return filmService.findFilmsByDirectorsId(directorId, sortBy);
+    }
+
+
+
 }

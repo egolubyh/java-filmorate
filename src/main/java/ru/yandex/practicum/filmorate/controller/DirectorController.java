@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.DirectorService;
+import ru.yandex.practicum.filmorate.service.ValidationService;
 
 import java.util.List;
 
@@ -17,15 +18,22 @@ import java.util.List;
 public class DirectorController {
 
     DirectorService directorService;
+    private final ValidationService validationService;
 
     @Autowired
-    public DirectorController( DirectorService directorService) {
+    public DirectorController( DirectorService directorService,ValidationService validationService) {
         this.directorService = directorService;
+        this. validationService=validationService;
     }
 
 
     @PostMapping("/directors")
-    public Director createDirector(@RequestBody Director director) throws NotFoundException {
+    public Director createDirector(@RequestBody Director director) throws NotFoundException, ValidationException {
+        if (!validationService.isValid(director)) {
+            throw new ValidationException("Ошибка валидации, недопустимые поля Director");
+        }
+
+
         return directorService.addDirector(director);
     }
 
