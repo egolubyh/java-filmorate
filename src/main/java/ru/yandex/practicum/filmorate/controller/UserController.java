@@ -66,6 +66,24 @@ public class UserController {
     }
 
     /**
+     * Удаление пользователя.
+     * @param userId идентификатор пользователя.     *
+     * @throws NotFoundException если пользователя с таким id не существует.
+     */
+
+    @DeleteMapping("/users/{userId}")
+    public void deleteUser(@PathVariable long userId) throws NotFoundException {
+        log.info("Запрошено удаление пользователя с id " + userId);
+        User user = userStorage.readUser(userId);
+        if (user != null) {
+            log.info("Удаляем пользователя с id " + user.getId());
+            userStorage.deleteUser(userId);
+        } else {
+            throw new NotFoundException(userId, "Пользователь с id" + userId + " не найден.");
+        }
+    }
+
+    /**
      * Добавление в друзья.
      * @param id идентификатор пользователя.
      * @param friendId идентификатор друга.

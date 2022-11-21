@@ -107,4 +107,22 @@ public class FilmController {
 
         return filmService.findMostPopularFilms(count);
     }
+
+    /**
+     * Удаление пользователя.
+     * @param filmId идентификатор пользователя.     *
+     * @throws NotFoundException если фильма с таким id не существует.
+     */
+
+    @DeleteMapping("/films/{filmId}")
+    public void deleteFilm(@PathVariable long filmId) throws NotFoundException {
+        log.info("Запрошено удаление фильма с id " + filmId);
+        Film film = filmStorage.readFilm(filmId);
+        if (film != null) {
+            log.info("Удаляем фильм " + film.getName());
+            filmStorage.deleteFilm(filmId);
+        } else {
+            throw new NotFoundException(filmId, "Фильм с id" + filmId + " не найден.");
+        }
+    }
 }
