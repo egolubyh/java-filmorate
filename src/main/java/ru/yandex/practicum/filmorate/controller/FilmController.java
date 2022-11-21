@@ -12,6 +12,7 @@ import ru.yandex.practicum.filmorate.service.ValidationService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -97,28 +98,30 @@ public class FilmController {
     /**
      * Возвращает список из первых count фильмов по количеству лайков.
      * Если значение параметра count не задано, вернет первые 10.
-     * @param count количество возвращаемых фильмов.
-     * @param genreId id жанра.
-     * @param year год релиза фильма.
+     * @param allParams параметры запроса: count - максимальное кол-во возвращаемых фильмов,
+     * genreId - id жанр фильма, year - год релиза фильма.
      * @return список фильмов.
      */
     @GetMapping("/films/popular")
-    public List<Film> findMostPopularFilms(
-            @RequestParam(value = "count", required = false) Integer count,
-            @RequestParam(value = "genreId", required = false) Long genreId,
-            @RequestParam(value = "year", required = false) Integer year) {
-        log.info("Получен запрос к эндпоинту: /films/popular, метод GET");
+    public List<Film> findMostPopularFilms(@RequestParam Map<String,String> allParams) {
+        log.info("Получен запрос к эндпоинту: /films/popular, метод GET, RequestParam = {}",
+                allParams);
 
-        if (count == null && genreId == null && year == null) {
+        if (allParams.isEmpty()) {
             return filmService.findMostPopularFilms(10);
-        } else if (count != null && genreId == null && year == null) {
-            return filmService.findMostPopularFilms(count);
-        } else if (count == null && genreId != null && year == null) {
-            return filmService.findMostPopularFilmsByGenre(genreId);
-        } else if (count == null && genreId == null) {
-            return filmService.findMostPopularFilmsByYear(year);
+        } else if (allParams.containsKey("count")) {
+            return filmService.findMostPopularFilms(
+                    Integer.parseInt(allParams.get("count")));
+        } else if (allParams.containsKey("genreId") && allParams.containsKey("year")) {
+            return filmService.findMostPopularFilmsByGenreAndYear(
+                    Long.parseLong(allParams.get("genreId")),
+                    Integer.parseInt(allParams.get("year")));
+        } else if (allParams.containsKey("genreId")) {
+            return filmService.findMostPopularFilmsByGenre(
+                    Long.parseLong(allParams.get("genreId")));
         } else {
-            return filmService.findMostPopularFilmsByGenreAndYear(genreId, year);
+            return filmService.findMostPopularFilmsByYear(
+                    Integer.parseInt(allParams.get("year")));
         }
     }
 }
