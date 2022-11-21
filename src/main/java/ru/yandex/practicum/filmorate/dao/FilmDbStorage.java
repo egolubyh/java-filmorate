@@ -216,7 +216,8 @@ public class FilmDbStorage implements FilmStorage {
         return jdbcTemplate.query(sqlQuery, this::mapRowToDirector, id);
     }
 
-
+/////пробросить исключение если мы удалили режисера по которому фильм выбираем
+    ///проверить метод findFilmsByDirectorsIdbyLike
     public List<Film> findFilmsByDirectorsIdbyLike(Long id) {
 
         String sqlQuery  = "SELECT F.ID, F.NAME, F.DESCRIPTION, F.RELEASEDATE,\n" +
