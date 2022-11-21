@@ -80,4 +80,9 @@ public class DirectorStorage {
                 .build();
     }
 
+    public void deleteDirectorsById(long id) {
+        final String sql = "delete from directors where id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
 }

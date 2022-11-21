@@ -2,6 +2,8 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.dao.DirectorStorage;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -11,6 +13,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.DirectorService;
 import ru.yandex.practicum.filmorate.service.ValidationService;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Slf4j
@@ -56,6 +59,13 @@ public class DirectorController {
         log.info("Получен запрос к эндпоинту: /directors, метод GET");
 
         return directorService.findAllDirectors();
+    }
+
+    @DeleteMapping("/directors/{id}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable long id) throws SQLException {
+        directorService.deleteDirectorsById(id);
+        log.info("DELETE delete director");
+        return ResponseEntity.ok().build();
     }
 
 }

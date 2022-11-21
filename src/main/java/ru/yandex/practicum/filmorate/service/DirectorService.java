@@ -42,4 +42,10 @@ public class DirectorService {
     }
 
 
+    public void deleteDirectorsById(long id) {
+        directorStorage.deleteDirectorsById(id);
+    }
+
+
+
 }

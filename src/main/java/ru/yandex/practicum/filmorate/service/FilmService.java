@@ -109,23 +109,11 @@ public class FilmService {
     }
 
 
-    public List<Film> findFilmsByDirectorsId(Long id, String sort) throws SQLException, NotFoundException {
+    public List<Film> findFilmsByDirectorsId(Long id, String sort)  {
 
 if (sort == "likes") {
     return filmStorage.findFilmsByDirectorsIdbyLike(id);
 }
 else return filmStorage.findFilmsByDirectorsIdbyYar(id);
-         //   case "likes"
     }
-
-
-
-
-
-
-
-
-
-
-
 }
