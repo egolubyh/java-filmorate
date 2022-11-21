@@ -97,6 +97,13 @@ public class FilmDbStorage implements FilmStorage {
         return jdbcTemplate.query(sqlQuery, this::mapRowToFilm);
     }
 
+
+
+
+
+
+    //только с директорами фильмы брать!!!Новый метод
+
     /**
      * Обновление информации о фильме
      * @param film фильм с обновленной информацией
@@ -116,8 +123,37 @@ public class FilmDbStorage implements FilmStorage {
                 film.getMpa().getId(),
                 film.getId());
 
+        if (film.getDirectors() != null) {
+
+            deleteDirectorsByFilmId(film.getId());
+
+
+            String sql = "insert into FILM_DIRECTOR values (?, ?)";
+            try (Connection connection = jdbcTemplate.getDataSource().getConnection();
+                 PreparedStatement ps = connection.prepareStatement(sql)) {
+                for (Director director : film.getDirectors()) {
+                    ps.setLong(1, film.getId());
+                    ps.setLong(2, director.getId());
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
         return film;
     }
+
+
+    public void deleteDirectorsByFilmId(long id) {
+        final String sql = "delete from Film_Director " +
+                "director_id " +
+                "where film_id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
+
 
     /**
      * Удаление записи о фильме
