@@ -127,6 +127,58 @@ public class FilmDbStorage implements FilmStorage {
         return Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery, Boolean.class, id));
     }
 
+    /**
+     * Найти список наиболее популярных фильмов по году
+     * @param year год фильма
+     * @return список идентификаторов фильма
+     */
+    public List<Long> findMostPopularIdByYear(int year) {
+        String sql = "SELECT f.ID AS FILM_ID " +
+                "FROM FILM AS f " +
+                "JOIN FILM_GENRE AS FG on f.ID = FG.FILM " +
+                "LEFT JOIN LIKES L on f.ID = L.FILM_ID " +
+                "WHERE EXTRACT(YEAR FROM f.RELEASEDATE) = ? " +
+                "GROUP BY f.ID " +
+                "ORDER BY COUNT(l.USER_ID) DESC ";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getLong("FILM_ID"), year);
+    }
+
+    /**
+     * Найти список наиболее популярных фильмов по жанру
+     * @param genreId id жанра
+     * @return список идентификаторов фильма
+     */
+    public List<Long> findMostPopularIdByGenre(long genreId) {
+        String sql = "SELECT f.ID AS FILM_ID " +
+                "FROM FILM AS f " +
+                "JOIN FILM_GENRE AS FG on f.ID = FG.FILM " +
+                "LEFT JOIN LIKES L on f.ID = L.FILM_ID " +
+                "WHERE FG.GENRE = ? " +
+                "GROUP BY f.ID " +
+                "ORDER BY COUNT(l.USER_ID) DESC ";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getLong("FILM_ID"), genreId);
+    }
+
+    /**
+     * Найти список наиболее популярных фильмов по жанру и году
+     * @param year год фильма
+     * @param genreId жанр фильма
+     * @return список идентификаторов фильма
+     */
+    public List<Long> findMostPopularIdByYearAndGenre(long genreId, int year) {
+        String sql = "SELECT f.ID AS FILM_ID " +
+                "FROM FILM AS f " +
+                "JOIN FILM_GENRE AS FG on f.ID = FG.FILM " +
+                "LEFT JOIN LIKES L on f.ID = L.FILM_ID " +
+                "WHERE EXTRACT(YEAR FROM f.RELEASEDATE) = ? AND FG.GENRE = ? " +
+                "GROUP BY f.ID " +
+                "ORDER BY COUNT(l.USER_ID) DESC ";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getLong("FILM_ID"),
+                year,genreId);
+    }
     private Film mapRowToFilm(ResultSet rs, int rowNum) throws SQLException {
         long filmId = rs.getLong("ID");
         long mpaId = rs.getLong("MPA");

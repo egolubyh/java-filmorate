@@ -98,13 +98,27 @@ public class FilmController {
      * Возвращает список из первых count фильмов по количеству лайков.
      * Если значение параметра count не задано, вернет первые 10.
      * @param count количество возвращаемых фильмов.
+     * @param genreId id жанра.
+     * @param year год релиза фильма.
      * @return список фильмов.
      */
     @GetMapping("/films/popular")
     public List<Film> findMostPopularFilms(
-            @RequestParam(defaultValue = "10", required = false) int count) {
+            @RequestParam(value = "count", required = false) Integer count,
+            @RequestParam(value = "genreId", required = false) Long genreId,
+            @RequestParam(value = "year", required = false) Integer year) {
         log.info("Получен запрос к эндпоинту: /films/popular, метод GET");
 
-        return filmService.findMostPopularFilms(count);
+        if (count == null && genreId == null && year == null) {
+            return filmService.findMostPopularFilms(10);
+        } else if (count != null && genreId == null && year == null) {
+            return filmService.findMostPopularFilms(count);
+        } else if (count == null && genreId != null && year == null) {
+            return filmService.findMostPopularFilmsByGenre(genreId);
+        } else if (count == null && genreId == null) {
+            return filmService.findMostPopularFilmsByYear(year);
+        } else {
+            return filmService.findMostPopularFilmsByGenreAndYear(genreId, year);
+        }
     }
 }
