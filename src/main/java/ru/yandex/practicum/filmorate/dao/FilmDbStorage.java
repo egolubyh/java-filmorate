@@ -123,10 +123,9 @@ public class FilmDbStorage implements FilmStorage {
                 film.getMpa().getId(),
                 film.getId());
 
+        deleteDirectorsByFilmId(film.getId());
+
         if (film.getDirectors() != null) {
-
-            deleteDirectorsByFilmId(film.getId());
-
 
             String sql = "insert into FILM_DIRECTOR values (?, ?)";
             try (Connection connection = jdbcTemplate.getDataSource().getConnection();
