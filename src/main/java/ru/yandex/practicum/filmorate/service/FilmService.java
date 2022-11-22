@@ -9,10 +9,10 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,7 +32,7 @@ public class FilmService {
         this.likeDbStorage = likeDbStorage;
         this.mpaDbStorage = mpaDbStorage;
         this.filmGenreDbStorage = filmGenreDbStorage;
-        this. directorStorage=directorStorage;
+        this.directorStorage=directorStorage;
     }
 
     /**
@@ -81,13 +81,27 @@ public class FilmService {
 
     /**
      * Получить список популярных фильмов.
-     * @param count длинна списка.
+     * @param allParams Параметры запроса: count - максимальное кол-во возвращаемых фильмов,
+     * genreId - id жанр фильма, year - год релиза фильма.
      * @return список фильмов.
      */
-    public List<Film> findMostPopularFilms(int count) {
-        return likeDbStorage.findMostPopularId(count).stream()
-                .map(filmStorage::readFilm)
-                .collect(Collectors.toList());
+    public List<Film> findMostPopular(Map<String, String> allParams) {
+        if (allParams.isEmpty()) {
+            return filmStorage.findMostPopularFilms(10);
+        } else if (allParams.containsKey("count")) {
+            return filmStorage.findMostPopularFilms(
+                    Integer.parseInt(allParams.get("count")));
+        } else if (allParams.containsKey("genreId") && allParams.containsKey("year")) {
+            return filmStorage.findMostPopularFilmsByYearAndGenre(
+                    Long.parseLong(allParams.get("genreId")),
+                    Integer.parseInt(allParams.get("year")));
+        } else if (allParams.containsKey("genreId")) {
+            return filmStorage.findMostPopularFilmsByGenre(
+                    Long.parseLong(allParams.get("genreId")));
+        } else {
+            return filmStorage.findMostPopularFilmsByYear(
+                    Integer.parseInt(allParams.get("year")));
+        }
     }
 
     private void setGenres(Film film) {
