@@ -177,6 +177,13 @@ public class FilmDbStorage implements FilmStorage {
         return Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery, Boolean.class, id));
     }
 
+    @Override
+    public boolean idDirectorNotExist(long id) {
+        String sqlQuery = "SELECT EXISTS(SELECT * FROM FILM_DIRECTOR WHERE DIRECTOR_ID = ?)";
+
+        return Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery, Boolean.class, id));
+    }
+
     private Film mapRowToFilm(ResultSet rs, int rowNum) throws SQLException {
         long filmId = rs.getLong("ID");
         long mpaId = rs.getLong("MPA");
@@ -221,14 +228,13 @@ public class FilmDbStorage implements FilmStorage {
     public List<Film> findFilmsByDirectorsIdbyLike(Long id) {
 
         String sqlQuery  = "SELECT F.ID, F.NAME, F.DESCRIPTION, F.RELEASEDATE,\n" +
-                "F.DURATION,F.RATE, F.MPA, F.ID, F.ID\n" +
+                "F.DURATION,F.RATE, F.MPA\n" +
                 "FROM FILM F\n" +
-                "JOIN MPA M ON F.MPA = M.ID\n" +
                 "LEFT JOIN LIKES L ON F.ID = L.FILM_ID\n" +
-                "JOIN FILM_DIRECTOR FD ON F.ID = FD.FILM_ID\n" +
+               "JOIN FILM_DIRECTOR FD ON F.ID = FD.FILM_ID\n" +
                 "WHERE FD.DIRECTOR_ID = ?\n" +
-                "GROUP BY F.ID\n" +
-                " ORDER BY COUNT(L.USER_ID)";
+               "GROUP BY F.ID \n" +
+                " ORDER BY COUNT(L.USER_ID) ";
 
         return jdbcTemplate.query(sqlQuery, this::mapRowToFilm, id);
     }
@@ -237,9 +243,8 @@ public class FilmDbStorage implements FilmStorage {
     public List<Film> findFilmsByDirectorsIdbyYar(Long id) {
 
         String sqlQuery  = "SELECT F.ID, F.NAME, F.DESCRIPTION, F.RELEASEDATE,\n" +
-                "F.DURATION,F.RATE, F.MPA, F.ID, F.ID\n" +
+                "F.DURATION,F.RATE, F.MPA\n" +
                 "                FROM FILM F\n" +
-                "               JOIN MPA M ON F.MPA = M.ID\n" +
                 "                JOIN FILM_DIRECTOR FD ON F.ID = FD.FILM_ID\n" +
                 "                WHERE FD.DIRECTOR_ID = ?" +
                 "                ORDER BY F.RELEASEDATE ";
