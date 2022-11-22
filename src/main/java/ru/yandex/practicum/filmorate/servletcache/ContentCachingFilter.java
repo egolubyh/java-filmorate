@@ -13,9 +13,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-@Order(value = Ordered.HIGHEST_PRECEDENCE)
-@Component
-@WebFilter(filterName = "ContentCachingFilter", urlPatterns = "/*")
+//@Order(value = Ordered.HIGHEST_PRECEDENCE)
+//@Component
+//@WebFilter(filterName = "ContentCachingFilter", urlPatterns = "/*")
 public class ContentCachingFilter extends OncePerRequestFilter {
 
     @Override

@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.dao.ActivityStorage;
 import ru.yandex.practicum.filmorate.model.UserActivity;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -18,6 +19,14 @@ public class ActivityService {
 
     public void createActivity(UserActivity activity) {
         activityStorage.create(toMap(activity));
+    }
+
+    public List<UserActivity> getAllByUserId(Long userId) {
+        return activityStorage.getAllByUserId(userId);
+    }
+
+    public UserActivity getActivityByIdAndEventType(String eventType, Long id) {
+        return activityStorage.getActivityByIdAndEventType(eventType, id);
     }
 
     private Map<String, Object> toMap(UserActivity activity) {

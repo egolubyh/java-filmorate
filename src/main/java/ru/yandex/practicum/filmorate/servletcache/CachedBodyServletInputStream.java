@@ -1,12 +1,11 @@
 package ru.yandex.practicum.filmorate.servletcache;
 
-import lombok.SneakyThrows;
-
-import javax.servlet.ReadListener;
-import javax.servlet.ServletInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import javax.servlet.ReadListener;
+import javax.servlet.ServletInputStream;
 
 public class CachedBodyServletInputStream extends ServletInputStream {
 
@@ -16,10 +15,14 @@ public class CachedBodyServletInputStream extends ServletInputStream {
         this.cachedBodyInputStream = new ByteArrayInputStream(cachedBody);
     }
 
-    @SneakyThrows
     @Override
     public boolean isFinished() {
-        return cachedBodyInputStream.available() == 0;
+        try {
+            return cachedBodyInputStream.available() == 0;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
@@ -29,7 +32,7 @@ public class CachedBodyServletInputStream extends ServletInputStream {
 
     @Override
     public void setReadListener(ReadListener readListener) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override

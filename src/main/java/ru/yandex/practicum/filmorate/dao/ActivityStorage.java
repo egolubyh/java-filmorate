@@ -7,5 +7,8 @@ import java.util.Map;
 
 public interface ActivityStorage {
     void create(Map<String, Object> map);
+
     List<UserActivity> getAllByUserId(Long id);
+
+    UserActivity getActivityByIdAndEventType(String eventType, Long id);
 }

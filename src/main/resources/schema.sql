@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS activity (
     event_type VARCHAR,
     operation  VARCHAR,
     entity_id  BIGINT,
-    timestamp  TIMESTAMP
+    timestamp  BIGINT
 );
 
 
