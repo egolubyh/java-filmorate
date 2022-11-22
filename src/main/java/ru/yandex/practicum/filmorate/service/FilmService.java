@@ -113,10 +113,11 @@ public class FilmService {
 
     public List<Film> findFilmsByDirectorsId(Long id, String sort)  {
 
-if (sort == "likes") {
-
+if (sort.equals("likes")) {
+    log.info("getListFilmsByDirectorSortLikes");
     return filmStorage.findFilmsByDirectorsIdbyLike(id);
 }
-else return filmStorage.findFilmsByDirectorsIdbyYar(id);
+else  log.info("getListFilmsByDirectorSortYeear");
+    return filmStorage.findFilmsByDirectorsIdbyYar(id);
     }
 }

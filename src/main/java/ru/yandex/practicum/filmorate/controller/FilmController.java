@@ -113,7 +113,7 @@ public class FilmController {
     @GetMapping("/films/director/{directorId}")
     public Collection<Film> getFilmsByDirector(
             @PathVariable Long directorId,
-            @RequestParam(required = false, defaultValue = "likes") String sortBy) throws SQLException, NotFoundException {
+            @RequestParam(required = false, defaultValue = "year") String sortBy) throws SQLException, NotFoundException {
         log.info("getFilmsByDirector");
         if (filmStorage.idDirectorNotExist(directorId)) {
             throw new NotFoundException(directorId, "Ошибка, фильма с таким id = " + directorId + " не существует.");
