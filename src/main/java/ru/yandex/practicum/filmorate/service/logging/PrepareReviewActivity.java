@@ -48,9 +48,10 @@ public class PrepareReviewActivity implements PrepareActivityServise {
 
         if (request.getMethod().equals("PUT")) {
             Review req = objectMapper.readValue(request.getReader(), Review.class);
+            Review found = reviewService.readReview(req.getReviewId(), 1);
 
-            Long userId = req.getUserId();
-            Long entityId = req.getReviewId();
+            Long userId = found.getUserId();
+            Long entityId = found.getReviewId();
 
             return Map.ofEntries(
                     Map.entry("userId", userId),
