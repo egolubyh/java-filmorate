@@ -290,4 +290,57 @@ public class FilmDbStorage implements FilmStorage {
 
         return jdbcTemplate.query(sqlQuery, this::mapRowToFilm, id);
     }
+
+    /**
+     * Получить список фильмов по подстроке, поиск по названию фильма
+     * @param query подстрока
+     * @return список фильмов
+     */
+    public List<Film> findAllFilmsBySearchTitle(String query) {
+        String sqlQuery = "SELECT f.* " +
+                "FROM FILM AS f " +
+                "LEFT JOIN LIKES l on f.ID = l.FILM_ID " +
+                "WHERE f.NAME ILIKE '%" + query + "%' " +
+                "GROUP BY f.ID " +
+                "ORDER BY COUNT(l.USER_ID) DESC";
+
+        return jdbcTemplate.query(sqlQuery, this::mapRowToFilm);
+    }
+
+    /**
+     * Получить список фильмов по подстроке, поиск по режиссеру
+     * @param query подстрока
+     * @return список фильмов
+     */
+    public List<Film> findAllFilmsBySearchDirector(String query) {
+        String sqlQuery = "SELECT f.* " +
+                "FROM FILM AS f " +
+                "LEFT JOIN LIKES l on f.ID = l.FILM_ID " +
+                "JOIN FILM_DIRECTOR FD on f.ID = FD.FILM_ID " +
+                "JOIN DIRECTORS D on D.ID = FD.DIRECTOR_ID " +
+                "WHERE D.NAME ILIKE '%" + query + "%' " +
+                "GROUP BY f.ID " +
+                "ORDER BY COUNT(l.USER_ID) DESC";
+
+        return jdbcTemplate.query(sqlQuery, this::mapRowToFilm);
+    }
+
+    /**
+     * Получить список фильмов по подстроке, поиск по названию фильма и режиссеру
+     * @param query подстрока
+     * @return список фильмов
+     */
+    public List<Film> findAllFilmsBySearchDirectorAndTitle(String query) {
+        String sqlQuery = "SELECT f.* " +
+                "FROM FILM AS f " +
+                "LEFT JOIN LIKES l on f.ID = l.FILM_ID " +
+                "LEFT JOIN FILM_DIRECTOR FD on f.ID = FD.FILM_ID " +
+                "LEFT JOIN DIRECTORS D on D.ID = FD.DIRECTOR_ID " +
+                "WHERE D.NAME ILIKE '%" + query + "%' " +
+                "OR f.NAME ILIKE '%" + query + "%' " +
+                "GROUP BY f.ID " +
+                "ORDER BY COUNT(l.USER_ID) DESC";
+
+        return jdbcTemplate.query(sqlQuery, this::mapRowToFilm);
+    }
 }

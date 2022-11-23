@@ -134,4 +134,23 @@ if (sort.equals("likes")) {
 else  log.info("getListFilmsByDirectorSortYeear");
     return filmStorage.findFilmsByDirectorsIdbyYar(id);
     }
+
+    /**
+     * Получить список фильмов по подстроке
+     * @param query подстрока
+     * @param by где искать
+     * @return список фильмов
+     */
+    public List<Film> findFilmsBySearch(String query, List<String> by) {
+        List<Film> films = null;
+        if (by.contains("director") && by.contains("title")) {
+            films = filmStorage.findAllFilmsBySearchDirectorAndTitle(query);
+        } else if (by.get(0).equals("director")) {
+            films = filmStorage.findAllFilmsBySearchDirector(query);
+        } else if (by.get(0).equals("title")) {
+            films = filmStorage.findAllFilmsBySearchTitle(query);
+        }
+
+        return films;
+    }
 }
