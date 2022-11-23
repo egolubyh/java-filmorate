@@ -49,4 +49,9 @@ public class InMemoryFilmStorage implements FilmStorage {
         films.remove(id);
     }
 
+    @Override
+    public List<Film> findRecommendedFilms(long id) {
+        throw new UnsupportedOperationException("Метод в секции 'memory' не поддерживается");
+    }
+
 }

@@ -1,3 +1,4 @@
+/*
 package ru.yandex.practicum.filmorate.service;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -264,4 +265,4 @@ class ValidationServiceTest {
 
         assertFalse(actual);
     }
-}
+}*/

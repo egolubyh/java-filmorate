@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -99,10 +100,9 @@ public class FilmService {
 
     private void setGenres(Film film) {
         if (film.getGenres() != null) {
-            List<Genre> list = film.getGenres()
+            Set<Genre> list = film.getGenres()
                     .stream()
-                    .distinct()
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
             film.setGenres(list);
             filmGenreDbStorage.deleteFilmGenre(film.getId());
             filmGenreDbStorage.createFilmGenre(film.getId(),
