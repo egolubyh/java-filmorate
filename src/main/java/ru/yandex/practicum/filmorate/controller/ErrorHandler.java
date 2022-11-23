@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 @RestControllerAdvice("ru.yandex.practicum.filmorate.controller")
 public class ErrorHandler {
 
-    @ExceptionHandler
+   @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleException(final Exception e) {
         return "Произошла непредвиденная ошибка.";

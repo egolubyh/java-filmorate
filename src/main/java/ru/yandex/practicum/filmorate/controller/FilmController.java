@@ -11,7 +11,10 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.ValidationService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
+import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -97,15 +100,16 @@ public class FilmController {
     /**
      * Возвращает список из первых count фильмов по количеству лайков.
      * Если значение параметра count не задано, вернет первые 10.
-     * @param count количество возвращаемых фильмов.
+     * @param allParams параметры запроса: count - максимальное кол-во возвращаемых фильмов,
+     * genreId - id жанр фильма, year - год релиза фильма.
      * @return список фильмов.
      */
     @GetMapping("/films/popular")
-    public List<Film> findMostPopularFilms(
-            @RequestParam(defaultValue = "10", required = false) int count) {
-        log.info("Получен запрос к эндпоинту: /films/popular, метод GET");
+    public List<Film> findMostPopularFilms(@RequestParam Map<String,String> allParams) {
+        log.info("Получен запрос к эндпоинту: /films/popular, метод GET, RequestParam = {}",
+                allParams);
 
-        return filmService.findMostPopularFilms(count);
+        return filmService.findMostPopular(allParams);
     }
 
     /**
@@ -125,4 +129,18 @@ public class FilmController {
             throw new NotFoundException(filmId, "Фильм с id" + filmId + " не найден.");
         }
     }
+
+    @GetMapping("/films/director/{directorId}")
+    public Collection<Film> getFilmsByDirector(
+            @PathVariable Long directorId,
+            @RequestParam(required = false, defaultValue = "year") String sortBy) throws SQLException, NotFoundException {
+        log.info("getFilmsByDirector");
+        if (filmStorage.idDirectorNotExist(directorId)) {
+            throw new NotFoundException(directorId, "Ошибка, фильма с таким id = " + directorId + " не существует.");
+        }
+        return filmService.findFilmsByDirectorsId(directorId, sortBy);
+    }
+
+
+
 }

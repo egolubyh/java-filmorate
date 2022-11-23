@@ -39,4 +39,6 @@ public class Film {
      * Список жанров фильма
      */
     private List<Genre> genres;
+    private List<Director> directors;
+
 }
