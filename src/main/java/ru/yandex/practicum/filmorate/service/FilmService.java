@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.model.User;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -135,10 +136,12 @@ else  log.info("getListFilmsByDirectorSortYeear");
     return filmStorage.findFilmsByDirectorsIdbyYar(id);
     }
 
-    public List<Film> GetCommonFilms(Long id) {
-        return null;
+    public List<Film> GetCommonFilms(Long userId, Long friendId) {
+        List<Film> UserLikedFilms =  filmStorage.GetFilmsLikedByUser(userId);
+        List<Film> friendLikedFilms = filmStorage.GetFilmsLikedByUser(friendId);
+        log.debug("Общие друзья найдены.");
+        return UserLikedFilms.stream()
+                .filter(friendLikedFilms::contains)
+                .collect(Collectors.toList());
     }
-
-
-
 }
