@@ -53,22 +53,24 @@ public class FilmDbStorage implements FilmStorage {
 
 
         if (film.getDirectors() != null) {
-            String sql = "insert into FILM_DIRECTOR values (?, ?)";
-            try (Connection connection = jdbcTemplate.getDataSource().getConnection();
-                 PreparedStatement ps = connection.prepareStatement(sql)) {
-                for (Director director : film.getDirectors()) {
-                    ps.setLong(1, film.getId());
-                    ps.setLong(2, director.getId());
-                    ps.addBatch();
-                }
-                ps.executeBatch();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            insertFilmAndDirector(film);
         }
-
-
         return film;
+    }
+
+    public void insertFilmAndDirector(Film film) {
+        String sql = "insert into FILM_DIRECTOR values (?, ?)";
+        try (Connection connection = jdbcTemplate.getDataSource().getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            for (Director director : film.getDirectors()) {
+                ps.setLong(1, film.getId());
+                ps.setLong(2, director.getId());
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -97,12 +99,6 @@ public class FilmDbStorage implements FilmStorage {
     }
 
 
-
-
-
-
-    //только с директорами фильмы брать!!!Новый метод
-
     /**
      * Обновление информации о фильме
      * @param film фильм с обновленной информацией
@@ -125,24 +121,10 @@ public class FilmDbStorage implements FilmStorage {
         deleteDirectorsByFilmId(film.getId());
 
         if (film.getDirectors() != null) {
-
-            String sql = "insert into FILM_DIRECTOR values (?, ?)";
-            try (Connection connection = jdbcTemplate.getDataSource().getConnection();
-                 PreparedStatement ps = connection.prepareStatement(sql)) {
-                for (Director director : film.getDirectors()) {
-                    ps.setLong(1, film.getId());
-                    ps.setLong(2, director.getId());
-                    ps.addBatch();
-                }
-                ps.executeBatch();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            insertFilmAndDirector(film);
         }
-
         return film;
     }
-
 
     public void deleteDirectorsByFilmId(long id) {
         final String sql = "delete from Film_Director " +
@@ -150,8 +132,6 @@ public class FilmDbStorage implements FilmStorage {
                 "where film_id = ?";
         jdbcTemplate.update(sql, id);
     }
-
-
 
     /**
      * Удаление записи о фильме
@@ -264,13 +244,8 @@ public class FilmDbStorage implements FilmStorage {
         film.setMpa(mpaDbStorage.readMpa(mpaId));
         film.setGenres(filmGenreDbStorage.readAllFilmGenre(filmId));
         film.setDirectors(findDirectorsByFilmId(filmId));
-
-
         return film;
     }
-
-
-
 
     private Director mapRowToDirector(ResultSet resultSet, int rowNum) throws SQLException {
         return Director.builder()
@@ -289,8 +264,7 @@ public class FilmDbStorage implements FilmStorage {
         return jdbcTemplate.query(sqlQuery, this::mapRowToDirector, id);
     }
 
-/////пробросить исключение если мы удалили режисера по которому фильм выбираем
-    ///проверить метод findFilmsByDirectorsIdbyLike
+
     public List<Film> findFilmsByDirectorsIdbyLike(Long id) {
 
         String sqlQuery  = "SELECT F.ID, F.NAME, F.DESCRIPTION, F.RELEASEDATE,\n" +
@@ -304,7 +278,6 @@ public class FilmDbStorage implements FilmStorage {
 
         return jdbcTemplate.query(sqlQuery, this::mapRowToFilm, id);
     }
-
 
     public List<Film> findFilmsByDirectorsIdbyYar(Long id) {
 
