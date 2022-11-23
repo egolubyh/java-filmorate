@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 
@@ -37,11 +38,11 @@ public class Film {
 
     @NonFinal
     @Setter
-    Set<Genre> genres;
+    List<Genre> genres;
 
     @NonFinal
     @Setter
-    Set<Director> directors;
+    List<Director> directors;
 
     @NonFinal
     @NonNull

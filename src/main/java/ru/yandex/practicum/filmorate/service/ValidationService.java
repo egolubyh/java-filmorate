@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -37,5 +38,9 @@ public class ValidationService {
         if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) return false;
         if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) return false;
         return !user.getBirthday().isAfter(LocalDate.now());
+    }
+
+    public boolean isValid(Director director) {
+        return !director.getName().isBlank();
     }
 }

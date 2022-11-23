@@ -5,12 +5,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import lombok.Builder;
+import lombok.Data;
+
+@Builder
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(exclude = {"name"})
 public class Director {
 
-    private long id;
-    private String name;
+    int id;
+    String name;
+
 }

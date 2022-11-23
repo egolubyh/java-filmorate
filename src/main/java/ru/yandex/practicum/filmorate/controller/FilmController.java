@@ -11,6 +11,8 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.ValidationService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
+import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -127,4 +129,22 @@ public class FilmController {
             throw new NotFoundException(filmId, "Фильм с id" + filmId + " не найден.");
         }
     }
+
+    @DeleteMapping("/films")
+    public void deleteAllFilms() {
+        log.info("Запрошено удаление всех фильмов");
+        filmStorage.deleteAllFilms();
+    }
+
+    @GetMapping("/films/director/{directorId}")
+    public Collection<Film> getFilmsByDirector(
+            @PathVariable Long directorId,
+            @RequestParam(required = false, defaultValue = "year") String sortBy) throws SQLException, NotFoundException {
+        log.info("getFilmsByDirector");
+        if (filmStorage.idDirectorNotExist(directorId)) {
+            throw new NotFoundException(directorId, "Ошибка, фильма с таким id = " + directorId + " не существует.");
+        }
+        return filmService.findFilmsByDirectorsId(directorId, sortBy);
+    }
+
 }

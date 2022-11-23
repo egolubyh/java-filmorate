@@ -15,7 +15,11 @@ public interface FilmStorage {
 
     void deleteFilm(long id);
 
+    void deleteAllFilms();
+
     boolean idNotExist(long id);
+
+    boolean idDirectorNotExist(long id);
 
     List<Film> findRecommendedFilms(long id);
 }

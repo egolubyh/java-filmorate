@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.dao.*;
@@ -13,6 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class FilmService {
 
     private final FilmDbStorage filmStorage;
@@ -100,9 +102,10 @@ public class FilmService {
 
     private void setGenres(Film film) {
         if (film.getGenres() != null) {
-            Set<Genre> list = film.getGenres()
+            List<Genre> list = film.getGenres()
                     .stream()
-                    .collect(Collectors.toSet());
+                    .distinct()
+                    .collect(Collectors.toList());
             film.setGenres(list);
             filmGenreDbStorage.deleteFilmGenre(film.getId());
             filmGenreDbStorage.createFilmGenre(film.getId(),
@@ -115,5 +118,15 @@ public class FilmService {
     private void setMpa(Film film) {
         Mpa mpa = mpaDbStorage.readMpa(film.getMpa().getId());
         film.setMpa(mpa);
+    }
+
+    public List<Film> findFilmsByDirectorsId(Long id, String sort)  {
+
+        if (sort.equals("likes")) {
+            log.info("getListFilmsByDirectorSortLikes");
+            return filmStorage.findFilmsByDirectorsIdbyLike(id);
+        }
+        else  log.info("getListFilmsByDirectorSortYear");
+        return filmStorage.findFilmsByDirectorsIdbyYar(id);
     }
 }
