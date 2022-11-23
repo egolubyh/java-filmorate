@@ -254,9 +254,9 @@ public class FilmDbStorage implements FilmStorage {
 
 
 
-
-
-
+    public List<Film> GetCommonFilms(Long id) {
+return null;
+    }
 
 
 
