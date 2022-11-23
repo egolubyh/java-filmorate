@@ -27,11 +27,8 @@ public class ValidationService {
         return film.getDuration() > 0;
     }
 
-
     public boolean isValid(Director director) {
-
-        if (director.getName().isBlank()) return false;
-        else return true;
+        return !director.getName().isBlank();
     }
 
     /**
