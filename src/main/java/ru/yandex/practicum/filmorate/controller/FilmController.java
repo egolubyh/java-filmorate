@@ -143,8 +143,9 @@ public class FilmController {
     }
 
 
-    @GetMapping("/films/{id}/friends/common/{otherId}")
-    public List<Film> findCommonFilms(@PathVariable Long id, @PathVariable Long otherId) {
-        return filmService.GetCommonFilms(id,otherId);
+    @GetMapping("/films/common")
+    public List<Film> findCommonFilms(@RequestParam Long userId, Long friendId)
+           {
+        return filmService.GetCommonFilms(userId,friendId);
     }
 }
