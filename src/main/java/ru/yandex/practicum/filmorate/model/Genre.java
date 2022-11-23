@@ -8,7 +8,12 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Genre {
-
+    /**
+     * Идентификатор genre
+     */
     private long id;
+    /**
+     * Наименование genre
+     */
     private String name;
 }

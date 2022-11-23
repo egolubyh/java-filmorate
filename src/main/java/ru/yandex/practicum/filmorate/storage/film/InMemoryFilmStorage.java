@@ -51,17 +51,12 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public List<Film> findRecommendedFilms(long id) {
-        throw new UnsupportedOperationException("Метод в секции 'memory' не поддерживается");
+        throw new UnsupportedOperationException("Не относится к inMemory");
     }
 
     @Override
     public boolean idDirectorNotExist(long id) {
-        throw new UnsupportedOperationException("Метод в секции 'memory' не поддерживается");
-    }
-
-    @Override
-    public void deleteAllFilms() {
-        throw new UnsupportedOperationException("Метод в секции 'memory' не поддерживается");
+        throw new UnsupportedOperationException("Не относится к inMemory");
     }
 
 }

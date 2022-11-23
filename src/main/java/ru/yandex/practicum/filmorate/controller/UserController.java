@@ -70,7 +70,6 @@ public class UserController {
      * @param userId идентификатор пользователя.     *
      * @throws NotFoundException если пользователя с таким id не существует.
      */
-
     @DeleteMapping("/users/{userId}")
     public void deleteUser(@PathVariable long userId) throws NotFoundException {
         log.info("Запрошено удаление пользователя с id " + userId);
@@ -187,10 +186,18 @@ public class UserController {
         return userService.findAllMutualFriends(id,otherId);
     }
 
+    /**
+     * Получить список рекомендованных фильмов для конкретного пользователя.
+     * @param id идентификатор пользователя.
+     * @return список фильмов.
+     * @throws NotFoundException если пользователя с таким id не существует.
+     */
     @GetMapping("users/{id}/recommendations")
-    public List<Film> findRecommendedFilms(@PathVariable(value = "id") long id) {
+    public List<Film> findRecommendedFilms(@PathVariable(value = "id") long id) throws NotFoundException {
+        log.info("Получен запрос к эндпоинту: /users/{id}/recommendations, метод GET");
+        if (userStorage.idNotExist(id)) {
+            throw new NotFoundException(id,"Ошибка, пользователя с таким id = " + id + "не существует.");
+        }
         return userService.findRecommendedFilms(id);
     }
-
-
 }

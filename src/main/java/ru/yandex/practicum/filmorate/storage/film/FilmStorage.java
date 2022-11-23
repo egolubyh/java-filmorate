@@ -11,15 +11,13 @@ public interface FilmStorage {
 
     List<Film> readAllFilms();
 
+    List<Film> findRecommendedFilms(long id);
+
     Film updateFilm(Film film);
 
     void deleteFilm(long id);
 
-    void deleteAllFilms();
-
     boolean idNotExist(long id);
 
     boolean idDirectorNotExist(long id);
-
-    List<Film> findRecommendedFilms(long id);
 }

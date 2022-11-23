@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.ValidationService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -113,11 +112,10 @@ public class FilmController {
     }
 
     /**
-     * Удаление пользователя.
-     * @param filmId идентификатор пользователя.     *
+     * Удаление записи о фильме.
+     * @param filmId идентификатор фильма.     *
      * @throws NotFoundException если фильма с таким id не существует.
      */
-
     @DeleteMapping("/films/{filmId}")
     public void deleteFilm(@PathVariable long filmId) throws NotFoundException {
         log.info("Запрошено удаление фильма с id " + filmId);
@@ -130,21 +128,19 @@ public class FilmController {
         }
     }
 
-    @DeleteMapping("/films")
-    public void deleteAllFilms() {
-        log.info("Запрошено удаление всех фильмов");
-        filmStorage.deleteAllFilms();
-    }
-
+    /**
+     * Возвращает список фильмов по режиссёру.
+     * @param directorId идентификатор режиссёра.     *
+     * @throws NotFoundException если режиссёра с таким id не существует.
+     */
     @GetMapping("/films/director/{directorId}")
     public Collection<Film> getFilmsByDirector(
             @PathVariable Long directorId,
-            @RequestParam(required = false, defaultValue = "year") String sortBy) throws SQLException, NotFoundException {
-        log.info("getFilmsByDirector");
+            @RequestParam(required = false, defaultValue = "year") String sortBy) throws NotFoundException {
+        log.info("Получен запрос к эндпоинту: /films/director/{directorId}, метод GET");
         if (filmStorage.idDirectorNotExist(directorId)) {
-            throw new NotFoundException(directorId, "Ошибка, фильма с таким id = " + directorId + " не существует.");
+            throw new NotFoundException(directorId, "Ошибка, режиссёра с таким id = " + directorId + " не существует.");
         }
         return filmService.findFilmsByDirectorsId(directorId, sortBy);
     }
-
 }

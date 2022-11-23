@@ -14,40 +14,61 @@ import java.util.Set;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class Film {
-
+    /**
+     * Идентификатор фильма
+     */
     long id;
-
+    /**
+     * Наименование фильма
+     */
     @NonNull
     @NotBlank
     String name;
-
+    /**
+     * Описание фильма
+     */
     @NonNull
     @Size(max = 200)
     String description;
-
+    /**
+     * Дата выхода фильма в прокат
+     */
     @NonNull
     LocalDate releaseDate;
-
+    /**
+     * Продолжительность фильма в минутах
+     */
     @Positive
     long duration;
-
+    /**
+     * Лайки для фильма
+     */
     @NonFinal
     @Setter
     Set<Long> likes;
-
+    /**
+     * Список жанров фильма
+     */
     @NonFinal
     @Setter
     List<Genre> genres;
-
+    /**
+     * Список режиссёров фильма
+     */
     @NonFinal
     @Setter
     List<Director> directors;
-
+    /**
+     * Рейтинг фильма
+     */
     @NonFinal
     @NonNull
     Mpa mpa;
-
+    /**
+     * Оценка фильма
+     */
     @NonFinal
     @Setter
     int rate;

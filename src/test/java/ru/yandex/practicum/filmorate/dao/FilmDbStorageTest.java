@@ -1,4 +1,3 @@
-/*
 package ru.yandex.practicum.filmorate.dao;
 
 import lombok.RequiredArgsConstructor;
@@ -109,4 +108,4 @@ class FilmDbStorageTest {
     void idNotExist() {
         assertTrue(filmDbStorage.idNotExist(999));
     }
-}*/
+}

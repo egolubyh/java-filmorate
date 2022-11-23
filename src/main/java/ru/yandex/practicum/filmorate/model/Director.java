@@ -11,8 +11,6 @@ import lombok.Data;
 @Builder
 @Data
 public class Director {
-
     int id;
     String name;
-
 }
