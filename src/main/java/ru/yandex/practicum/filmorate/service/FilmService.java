@@ -134,4 +134,11 @@ if (sort.equals("likes")) {
 else  log.info("getListFilmsByDirectorSortYeear");
     return filmStorage.findFilmsByDirectorsIdbyYar(id);
     }
+
+    public List<Film> GetCommonFilms(Long id) {
+        return null;
+    }
+
+
+
 }
