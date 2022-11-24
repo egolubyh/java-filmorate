@@ -2,12 +2,15 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.dao.*;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,13 +24,15 @@ public class FilmService {
     private final MpaDbStorage mpaDbStorage;
     private final FilmGenreDbStorage filmGenreDbStorage;
 
+    private final DirectorStorage directorStorage;
     @Autowired
-    public FilmService(FilmDbStorage filmStorage,
-                       LikeDbStorage likeDbStorage, MpaDbStorage mpaDbStorage, FilmGenreDbStorage filmGenreDbStorage) {
+    public FilmService(@Qualifier("filmDbStorage") FilmDbStorage filmStorage,
+                       LikeDbStorage likeDbStorage, MpaDbStorage mpaDbStorage, FilmGenreDbStorage filmGenreDbStorage,DirectorStorage directorStorage) {
         this.filmStorage = filmStorage;
         this.likeDbStorage = likeDbStorage;
         this.mpaDbStorage = mpaDbStorage;
         this.filmGenreDbStorage = filmGenreDbStorage;
+        this.directorStorage=directorStorage;
     }
 
     /**

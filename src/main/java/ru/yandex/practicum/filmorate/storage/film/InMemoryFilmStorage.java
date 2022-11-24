@@ -38,6 +38,11 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
+    public boolean idDirectorNotExist(long id) {
+        return false;
+    }
+
+    @Override
     public Film updateFilm(Film film) {
         films.put(film.getId(), film);
 
