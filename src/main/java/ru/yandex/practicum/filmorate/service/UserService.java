@@ -40,6 +40,7 @@ public class UserService {
      */
     public void addFriend(long userId, long friendId) {
         friendsDbStorage.createFriendship(userId,friendId);
+
     }
 
     /**

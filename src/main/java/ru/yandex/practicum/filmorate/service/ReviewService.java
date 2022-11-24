@@ -72,6 +72,13 @@ public class ReviewService {
     /**
      * Проверка на наличии фильма и пользователя в базе
      */
+
+    /**
+     * Получение обзора по id пользователя и id фильма
+     */
+    public Review findReviewByUserAndFilmId(Long userId, Long filmId) throws NotFoundException {
+        return reviewStorage.readReviewByUserIdAndFilmId(userId, filmId);
+    }
     private boolean checkExistFilmsAndUser(long userId, long filmId) throws NotFoundException {
         if(filmStorage.idNotExist(filmId)){
             throw new NotFoundException(filmId, "Ошибка, фильма с таким id = " + filmId + " не существует.");

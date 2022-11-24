@@ -306,6 +306,7 @@ public class FilmDbStorage implements FilmStorage {
         return jdbcTemplate.query(sqlQuery, this::mapRowToFilm, id);
     }
 
+
     public void deleteDirectorsByFilmId(long id) {
         String sql = "DELETE FROM FILM_DIRECTOR WHERE FILM_ID = ?";
         jdbcTemplate.update(sql, id);
@@ -324,5 +325,18 @@ public class FilmDbStorage implements FilmStorage {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
+
+    public List<Film> GetFilmsLikedByUser(Long userId) {
+
+        String sqlQuery  ="select f.id, f.name, f.DESCRIPTION, f.RELEASEDATE, f.DURATION, f.Rate, f.MPA\n" +
+                "from film as f\n" +
+                "LEFT JOIN LIKES l ON f.ID = l.FILM_ID\n" +
+                "Where l.USER_ID = ?\n" +
+                "GROUP BY f.ID\n" +
+                "ORDER BY COUNT(l.USER_ID) DESC";
+        return jdbcTemplate.query(sqlQuery, this::mapRowToFilm, userId);
+
     }
 }
