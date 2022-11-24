@@ -59,21 +59,6 @@ public class FilmDbStorage implements FilmStorage {
         return film;
     }
 
-    public void insertFilmAndDirector(Film film) {
-        String sql = "insert into FILM_DIRECTOR values (?, ?)";
-        try (Connection connection = jdbcTemplate.getDataSource().getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            for (Director director : film.getDirectors()) {
-                ps.setLong(1, film.getId());
-                ps.setLong(2, director.getId());
-                ps.addBatch();
-            }
-            ps.executeBatch();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * Получить фильм
      * @param id идентификатор фильма
@@ -126,13 +111,6 @@ public class FilmDbStorage implements FilmStorage {
         }
 
         return film;
-    }
-
-    public void deleteDirectorsByFilmId(long id) {
-        final String sql = "delete from Film_Director " +
-                "director_id " +
-                "where film_id = ?";
-        jdbcTemplate.update(sql, id);
     }
 
     /**
@@ -346,11 +324,5 @@ public class FilmDbStorage implements FilmStorage {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public boolean idDirectorNotExist(long id) {
-        String sqlQuery = "SELECT EXISTS(SELECT * FROM FILM_DIRECTOR WHERE DIRECTOR_ID = ?)";
-        return Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery, Boolean.class, id));
     }
 }
