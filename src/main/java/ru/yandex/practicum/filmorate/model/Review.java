@@ -11,7 +11,7 @@ public class Review {
     /**
      * Идентификатор отзыва
      */
-    private long reviewId;
+    private Long reviewId;
     /**
      *Описание отзыва
      */
