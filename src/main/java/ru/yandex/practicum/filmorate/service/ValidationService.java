@@ -13,21 +13,27 @@ public class ValidationService {
 
     /**
      * Проверка всех полей фильма на допустимость.
+     *
      * @param film фильм.
      * @return результат соответствия true или false.
      */
     public boolean isValid(Film film) {
         if (film.getId() < 0) return false;
         if (film.getName() == null || film.getDescription() == null
-                || film.getReleaseDate() == null ) return false;
+                || film.getReleaseDate() == null) return false;
         if (film.getName().isEmpty()) return false;
         if (film.getDescription().length() > 200) return false;
-        if (film.getReleaseDate().isBefore(LocalDate.of(1895,12,28))) return false;
+        if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) return false;
         return film.getDuration() > 0;
+    }
+
+    public boolean isValid(Director director) {
+        return !director.getName().isBlank();
     }
 
     /**
      * Проверка всех полей пользователя на допустимость.
+     *
      * @param user пользователь.
      * @return результат соответствия true или false.
      */

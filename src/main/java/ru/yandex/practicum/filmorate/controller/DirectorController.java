@@ -67,5 +67,4 @@ public class DirectorController {
         log.info("DELETE delete director");
         return ResponseEntity.ok().build();
     }
-
 }
