@@ -167,6 +167,7 @@ public class UserController {
             throw new NotFoundException(id,"Ошибка, пользователя с таким id = " + id + "не существует.");
         }
         return userService.findRecommendedFilms(id);
+        }
         
         
     /**
