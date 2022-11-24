@@ -37,9 +37,9 @@ public class FilmGenreDbStorage {
      */
 
     public List<Genre> readAllFilmGenre(long filmId) {
-        String sqlQuery = "SELECT GENRE AS ID, g.TITLE AS NAME " +
-                "FROM FILM_GENRE AS fg " +
-                "JOIN GENRE AS G on G.ID = fg.GENRE " +
+        String sqlQuery = "SELECT GENRE AS ID, G.NAME AS NAME " +
+                "FROM FILM_GENRE AS FG " +
+                "JOIN GENRE AS G on G.ID = FG.GENRE " +
                 "WHERE FILM = ?";
 
         return jdbcTemplate.query(sqlQuery,
