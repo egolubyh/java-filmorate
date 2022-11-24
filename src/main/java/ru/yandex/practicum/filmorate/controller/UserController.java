@@ -170,14 +170,13 @@ public class UserController {
         
         
     /**
-     * Получить ленту событий для указанного userId
+     * Получить ленту событий для указанного userId.
      * @param id идентификатор пользователя.
      * @return Лента событий.
      */
-    @GetMapping(value = "/users/{id}/feed")
+    @GetMapping("/users/{id}/feed")
     public List<UserActivity> getActivitiesByUserId(@PathVariable long id) {
         log.info("Получен запрос к эндпоинту: /users/{id}/feed, метод GET");
         return activityService.getAllByUserId(id);
-
     }
 }
