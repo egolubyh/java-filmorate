@@ -155,7 +155,6 @@ public class UserController {
     }
 
     /**
-
      * Получить список рекомендованных фильмов для конкретного пользователя.
      * @param id идентификатор пользователя.
      * @return список фильмов.
@@ -168,7 +167,9 @@ public class UserController {
             throw new NotFoundException(id,"Ошибка, пользователя с таким id = " + id + "не существует.");
         }
         return userService.findRecommendedFilms(id);
-
+        
+        
+    /**
      * Получить ленту событий для указанного userId
      * @param id идентификатор пользователя.
      * @return Лента событий.
