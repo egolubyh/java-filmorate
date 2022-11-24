@@ -23,19 +23,19 @@ public class Film {
     /**
      * Наименование фильма
      */
-    @NonNull
+
     @NotBlank
     String name;
     /**
      * Описание фильма
      */
-    @NonNull
+
     @Size(max = 200)
     String description;
     /**
      * Дата выхода фильма в прокат
      */
-    @NonNull
+
     LocalDate releaseDate;
     /**
      * Продолжительность фильма в минутах
