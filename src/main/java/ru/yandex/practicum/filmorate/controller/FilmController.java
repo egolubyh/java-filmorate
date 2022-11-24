@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.ValidationService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
@@ -142,5 +143,9 @@ public class FilmController {
     }
 
 
-
+    @GetMapping("/films/common")
+    public List<Film> findCommonFilms(@RequestParam Long userId, Long friendId)
+           {
+        return filmService.GetCommonFilms(userId,friendId);
+    }
 }
