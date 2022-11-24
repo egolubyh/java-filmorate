@@ -343,4 +343,16 @@ public class FilmDbStorage implements FilmStorage {
 
         return jdbcTemplate.query(sqlQuery, this::mapRowToFilm);
     }
+
+
+    public List<Film> GetFilmsLikedByUser(Long userId) {
+
+        String sqlQuery  ="select f.id, f.name, f.DESCRIPTION, f.RELEASEDATE, f.DURATION, f.Rate, f.MPA\n" +
+                "from film as f\n" +
+                "LEFT JOIN LIKES l ON f.ID = l.FILM_ID\n" +
+                "Where l.USER_ID = ?\n" +
+                "GROUP BY f.ID\n" +
+                "ORDER BY COUNT(l.USER_ID) DESC";
+        return jdbcTemplate.query(sqlQuery, this::mapRowToFilm, userId);
+    }
 }
