@@ -142,10 +142,22 @@ public class FilmController {
         return filmService.findFilmsByDirectorsId(directorId, sortBy);
     }
 
+    /**
+     * Получить список фильмов по подстроке
+     * @param query подстрока
+     * @param by где искать
+     * @return список фильмов
+     */
+    @GetMapping("/films/search")
+    public List<Film> findFilmsBySearch(@RequestParam String query,
+                                        @RequestParam List<String> by) {
+        log.info("Получен запрос к эндпоинту: /films/search?query={}&by={} метод GET", query, by);
 
+        return filmService.findFilmsBySearch(query, by);
+    }
+    
     @GetMapping("/films/common")
-    public List<Film> findCommonFilms(@RequestParam Long userId, Long friendId)
-           {
+    public List<Film> findCommonFilms(@RequestParam Long userId, Long friendId) {
         return filmService.GetCommonFilms(userId,friendId);
     }
 }
