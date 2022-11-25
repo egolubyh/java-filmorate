@@ -11,6 +11,8 @@ public interface FilmStorage {
 
     List<Film> readAllFilms();
 
+    List<Film> findRecommendedFilms(long id);
+
     Film updateFilm(Film film);
 
     void deleteFilm(long id);

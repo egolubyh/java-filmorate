@@ -4,18 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
+
+import org.springframework.jdbc.support.KeyHolder;;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Director;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 import java.util.Objects;
 
@@ -50,12 +47,6 @@ public class DirectorStorage {
         return findDirectorById((long) director.getId());
     }
 
-
-
-
-
-
-
     public Director findDirectorById(Long id) throws NotFoundException {
         String sqlQuery = "select * from Directors where id = ?";
         Director director;
@@ -72,7 +63,6 @@ public class DirectorStorage {
         return jdbcTemplate.query(sqlQuery, this::mapRowToDirector);
     }
 
-
     private Director mapRowToDirector(ResultSet resultSet, int rowNum) throws SQLException {
         return Director.builder()
                 .id((int) resultSet.getLong("id"))
@@ -84,5 +74,4 @@ public class DirectorStorage {
         final String sql = "delete from directors where id = ?";
         jdbcTemplate.update(sql, id);
     }
-
 }

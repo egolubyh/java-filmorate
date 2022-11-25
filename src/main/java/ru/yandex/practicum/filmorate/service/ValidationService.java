@@ -25,11 +25,7 @@ public class ValidationService {
         if (film.getDescription().length() > 200) return false;
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) return false;
         return film.getDuration() > 0;
-    }
-
-    public boolean isValid(Director director) {
-        return !director.getName().isBlank();
-    }
+    }    
 
     /**
      * Проверка всех полей пользователя на допустимость.
@@ -44,5 +40,9 @@ public class ValidationService {
         if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) return false;
         if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) return false;
         return !user.getBirthday().isAfter(LocalDate.now());
+    }
+
+    public boolean isValid(Director director) {
+        return !director.getName().isBlank();
     }
 }

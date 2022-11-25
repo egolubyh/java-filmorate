@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.model.UserActivity;
 import ru.yandex.practicum.filmorate.service.ActivityService;
@@ -76,7 +77,6 @@ public class UserController {
      * @param userId идентификатор пользователя.     *
      * @throws NotFoundException если пользователя с таким id не существует.
      */
-
     @DeleteMapping("/users/{userId}")
     public void deleteUser(@PathVariable long userId) throws NotFoundException {
         log.info("Запрошено удаление пользователя с id " + userId);
@@ -155,11 +155,27 @@ public class UserController {
     }
 
     /**
-     * Получить ленту событий для указанного userId
+     * Получить список рекомендованных фильмов для конкретного пользователя.
+     * @param id идентификатор пользователя.
+     * @return список фильмов.
+     * @throws NotFoundException если пользователя с таким id не существует.
+     */
+    @GetMapping("users/{id}/recommendations")
+    public List<Film> findRecommendedFilms(@PathVariable(value = "id") long id) throws NotFoundException {
+        log.info("Получен запрос к эндпоинту: /users/{id}/recommendations, метод GET");
+        if (userStorage.idNotExist(id)) {
+            throw new NotFoundException(id,"Ошибка, пользователя с таким id = " + id + "не существует.");
+        }
+        return userService.findRecommendedFilms(id);
+        }
+        
+        
+    /**
+     * Получить ленту событий для указанного userId.
      * @param id идентификатор пользователя.
      * @return Лента событий.
      */
-    @GetMapping(value = "/users/{id}/feed")
+    @GetMapping("/users/{id}/feed")
     public List<UserActivity> getActivitiesByUserId(@PathVariable long id) {
         log.info("Получен запрос к эндпоинту: /users/{id}/feed, метод GET");
         return activityService.getAllByUserId(id);

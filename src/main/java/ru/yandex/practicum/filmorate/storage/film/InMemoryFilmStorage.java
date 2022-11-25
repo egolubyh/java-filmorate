@@ -38,11 +38,6 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public boolean idDirectorNotExist(long id) {
-        return false;
-    }
-
-    @Override
     public Film updateFilm(Film film) {
         films.put(film.getId(), film);
 
@@ -52,6 +47,16 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public void deleteFilm(long id) {
         films.remove(id);
+    }
+
+    @Override
+    public List<Film> findRecommendedFilms(long id) {
+        throw new UnsupportedOperationException("Не относится к inMemory");
+    }
+
+    @Override
+    public boolean idDirectorNotExist(long id) {
+        throw new UnsupportedOperationException("Не относится к inMemory");
     }
 
 }

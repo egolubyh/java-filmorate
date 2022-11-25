@@ -1,15 +1,19 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class Genre {
     /**
-     * Идентификатор жанра
+     * Идентификатор genre
      */
     private long id;
     /**
-     * Название жанра
+     * Наименование genre
      */
     private String name;
 }

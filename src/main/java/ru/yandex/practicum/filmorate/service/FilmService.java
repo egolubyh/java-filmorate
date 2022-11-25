@@ -128,12 +128,12 @@ public class FilmService {
 
     public List<Film> findFilmsByDirectorsId(Long id, String sort)  {
 
-if (sort.equals("likes")) {
-    log.info("getListFilmsByDirectorSortLikes");
-    return filmStorage.findFilmsByDirectorsIdbyLike(id);
-}
-else  log.info("getListFilmsByDirectorSortYeear");
-    return filmStorage.findFilmsByDirectorsIdbyYar(id);
+        if (sort.equals("likes")) {
+            log.info("getListFilmsByDirectorSortLikes");
+            return filmStorage.findFilmsByDirectorsIdbyLike(id);
+        }
+        else  log.info("getListFilmsByDirectorSortYear");
+        return filmStorage.findFilmsByDirectorsIdbyYar(id);
     }
 
     /**
