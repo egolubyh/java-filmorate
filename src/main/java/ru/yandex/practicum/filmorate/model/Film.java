@@ -1,42 +1,75 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.NonFinal;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Film {
     /**
      * Идентификатор фильма
      */
-    private long id;
+    long id;
     /**
-     * Название фильма
+     * Наименование фильма
      */
-    private String name;
+
+    @NotBlank
+    String name;
     /**
      * Описание фильма
      */
-    private String description;
+
+    @Size(max = 200)
+    String description;
     /**
      * Дата выхода фильма в прокат
      */
-    private LocalDate releaseDate;
+
+    LocalDate releaseDate;
     /**
      * Продолжительность фильма в минутах
      */
-    private int duration;
+    @Positive
+    long duration;
     /**
-     * Оценка фильма
+     * Лайки для фильма
      */
-    private int rate;
-    /**
-     * Рейтинг фильма
-     */
-    private Mpa mpa;
+    @NonFinal
+    @Setter
+    Set<Long> likes;
     /**
      * Список жанров фильма
      */
-    private List<Genre> genres;
+    @NonFinal
+    @Setter
+    List<Genre> genres;
+    /**
+     * Список режиссёров фильма
+     */
+    @NonFinal
+    @Setter
+    List<Director> directors;
+    /**
+     * Рейтинг фильма
+     */
+    @NonFinal
+    @NonNull
+    Mpa mpa;
+    /**
+     * Оценка фильма
+     */
+    @NonFinal
+    @Setter
+    int rate;
 }

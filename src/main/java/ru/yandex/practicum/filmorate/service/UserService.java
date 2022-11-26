@@ -5,7 +5,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.dao.FriendsDbStorage;
+import ru.yandex.practicum.filmorate.model.Film;
+
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.List;
@@ -15,12 +18,17 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
     private final UserStorage userStorage;
+    private final FilmStorage filmStorage;
     private final FriendsDbStorage friendsDbStorage;
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public UserService(@Qualifier("userDbStorage") UserStorage userStorage, FriendsDbStorage friendsDbStorage, JdbcTemplate jdbcTemplate) {
+    public UserService(@Qualifier("userDbStorage") UserStorage userStorage,
+                       @Qualifier("filmDbStorage") FilmStorage filmStorage,
+                       FriendsDbStorage friendsDbStorage,
+                       JdbcTemplate jdbcTemplate) {
         this.userStorage = userStorage;
+        this.filmStorage = filmStorage;
         this.friendsDbStorage = friendsDbStorage;
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -32,6 +40,7 @@ public class UserService {
      */
     public void addFriend(long userId, long friendId) {
         friendsDbStorage.createFriendship(userId,friendId);
+
     }
 
     /**
@@ -61,5 +70,11 @@ public class UserService {
         return friends.stream()
                 .map(userStorage::readUser)
                 .collect(Collectors.toList());
+    }
+
+    public List<Film> findRecommendedFilms(long id) {
+        List<Film> films = filmStorage.findRecommendedFilms(id);
+        /*log.debug("Рекомендовано для пользователя #{} {} фильмов", userId, films.size());*/
+        return films;
     }
 }

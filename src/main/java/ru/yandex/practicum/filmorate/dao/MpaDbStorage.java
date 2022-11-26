@@ -23,8 +23,7 @@ public class MpaDbStorage {
      * @return рейтинг
      */
     public Mpa readMpa(long id) {
-        String sqlQuery = "SELECT ID, TITLE AS NAME " +
-                " FROM MPA WHERE ID = ?";
+        String sqlQuery = "SELECT * FROM MPA WHERE ID = ?";
 
         return jdbcTemplate.queryForObject(sqlQuery,
                 new BeanPropertyRowMapper<>(Mpa.class), id);
@@ -35,7 +34,7 @@ public class MpaDbStorage {
      * @return список рейтингов
      */
     public List<Mpa> readAllMpa() {
-        String sqlQuery = "SELECT ID, TITLE AS NAME FROM MPA";
+        String sqlQuery = "SELECT * FROM MPA";
 
         return jdbcTemplate.query(sqlQuery, new BeanPropertyRowMapper<>(Mpa.class));
     }

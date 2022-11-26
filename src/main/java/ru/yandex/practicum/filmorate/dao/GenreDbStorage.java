@@ -24,8 +24,7 @@ public class GenreDbStorage {
      * @return жанр
      */
     public Optional<Genre> readGenre(long id) {
-        String sqlQuery = "SELECT ID, TITLE AS NAME " +
-                " FROM GENRE WHERE ID = ?";
+        String sqlQuery = "SELECT * FROM GENRE WHERE ID = ?";
 
         return jdbcTemplate.query(sqlQuery,
                 new BeanPropertyRowMapper<>(Genre.class), id).stream().findAny();
@@ -36,8 +35,7 @@ public class GenreDbStorage {
      * @return список жанров
      */
     public List<Genre> readAllGenre() {
-        String sqlQuery = "SELECT ID, TITLE AS NAME " +
-                "FROM GENRE ";
+        String sqlQuery = "SELECT * FROM GENRE";
 
         return jdbcTemplate.query(sqlQuery,
                 new BeanPropertyRowMapper<>(Genre.class));

@@ -49,4 +49,14 @@ public class InMemoryFilmStorage implements FilmStorage {
         films.remove(id);
     }
 
+    @Override
+    public List<Film> findRecommendedFilms(long id) {
+        throw new UnsupportedOperationException("Не относится к inMemory");
+    }
+
+    @Override
+    public boolean idDirectorNotExist(long id) {
+        throw new UnsupportedOperationException("Не относится к inMemory");
+    }
+
 }

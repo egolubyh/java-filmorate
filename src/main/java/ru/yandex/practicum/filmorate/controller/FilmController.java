@@ -7,11 +7,14 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.ValidationService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -97,23 +100,23 @@ public class FilmController {
     /**
      * Возвращает список из первых count фильмов по количеству лайков.
      * Если значение параметра count не задано, вернет первые 10.
-     * @param count количество возвращаемых фильмов.
+     * @param allParams параметры запроса: count - максимальное кол-во возвращаемых фильмов,
+     * genreId - id жанр фильма, year - год релиза фильма.
      * @return список фильмов.
      */
     @GetMapping("/films/popular")
-    public List<Film> findMostPopularFilms(
-            @RequestParam(defaultValue = "10", required = false) int count) {
-        log.info("Получен запрос к эндпоинту: /films/popular, метод GET");
+    public List<Film> findMostPopularFilms(@RequestParam Map<String,String> allParams) {
+        log.info("Получен запрос к эндпоинту: /films/popular, метод GET, RequestParam = {}",
+                allParams);
 
-        return filmService.findMostPopularFilms(count);
+        return filmService.findMostPopular(allParams);
     }
 
     /**
-     * Удаление пользователя.
-     * @param filmId идентификатор пользователя.     *
+     * Удаление записи о фильме.
+     * @param filmId идентификатор фильма.     *
      * @throws NotFoundException если фильма с таким id не существует.
      */
-
     @DeleteMapping("/films/{filmId}")
     public void deleteFilm(@PathVariable long filmId) throws NotFoundException {
         log.info("Запрошено удаление фильма с id " + filmId);
@@ -125,4 +128,40 @@ public class FilmController {
             throw new NotFoundException(filmId, "Фильм с id" + filmId + " не найден.");
         }
     }
+
+    /**
+     * Возвращает список фильмов по режиссёру.
+     * @param directorId идентификатор режиссёра.     *
+     * @throws NotFoundException если режиссёра с таким id не существует.
+     */
+    @GetMapping("/films/director/{directorId}")
+    public Collection<Film> getFilmsByDirector(
+            @PathVariable Long directorId,
+            @RequestParam(required = false, defaultValue = "year") String sortBy) throws NotFoundException {
+        log.info("Получен запрос к эндпоинту: /films/director/{directorId}, метод GET");
+        if (filmStorage.idDirectorNotExist(directorId)) {
+            throw new NotFoundException(directorId, "Ошибка, режиссёра с таким id = " + directorId + " не существует.");
+        }
+        return filmService.findFilmsByDirectorsId(directorId, sortBy);
+    }
+
+    /**
+     * Получить список фильмов по подстроке
+     * @param query подстрока
+     * @param by где искать
+     * @return список фильмов
+     */
+    @GetMapping("/films/search")
+    public List<Film> findFilmsBySearch(@RequestParam String query,
+                                        @RequestParam List<String> by) {
+        log.info("Получен запрос к эндпоинту: /films/search?query={}&by={} метод GET", query, by);
+
+        return filmService.findFilmsBySearch(query, by);
+    }    
+
+    @GetMapping("/films/common")
+    public List<Film> findCommonFilms(@RequestParam Long userId, Long friendId) {
+        return filmService.GetCommonFilms(userId,friendId);
+    }
+
 }

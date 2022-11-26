@@ -3,10 +3,14 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.UserActivity;
+import ru.yandex.practicum.filmorate.service.ActivityService;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.service.ValidationService;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
@@ -20,13 +24,17 @@ public class UserController {
     private final UserService userService;
     private final ValidationService validationService;
 
+    private final ActivityService activityService;
+
     @Autowired
     public UserController(@Qualifier("userDbStorage") UserStorage userStorage,
                           UserService userService,
-                          ValidationService validationService) {
+                          ValidationService validationService,
+                          ActivityService activityService) {
         this.userStorage = userStorage;
         this.userService = userService;
         this.validationService = validationService;
+        this.activityService = activityService;
     }
 
     /**
@@ -69,7 +77,6 @@ public class UserController {
      * @param userId идентификатор пользователя.     *
      * @throws NotFoundException если пользователя с таким id не существует.
      */
-
     @DeleteMapping("/users/{userId}")
     public void deleteUser(@PathVariable long userId) throws NotFoundException {
         log.info("Запрошено удаление пользователя с id " + userId);
@@ -82,45 +89,6 @@ public class UserController {
         }
     }
 
-    /**
-     * Добавление в друзья.
-     * @param id идентификатор пользователя.
-     * @param friendId идентификатор друга.
-     * @throws NotFoundException если пользователя или друга с таким id не существует.
-     */
-    @PutMapping("/users/{id}/friends/{friendId}")
-    public void addFriends(@PathVariable long id,
-                           @PathVariable long friendId) throws NotFoundException {
-        log.info("Получен запрос к эндпоинту: /users/{id}/friends/{friendId}, метод PUT");
-        if (userStorage.idNotExist(id)) {
-            throw new NotFoundException(id,"Ошибка, пользователя с таким id = " + id + " не существует.");
-        }
-        if (userStorage.idNotExist(friendId)) {
-            throw new NotFoundException(friendId,"Ошибка, пользователя с таким id = " + friendId + " не существует.");
-        }
-
-        userService.addFriend(id,friendId);
-    }
-
-    /**
-     * Удаление из друзей.
-     * @param id идентификатор пользователя.
-     * @param friendId идентификатор друга.
-     * @throws NotFoundException если пользователя или друга с таким id не существует.
-     */
-    @DeleteMapping("/users/{id}/friends/{friendId}")
-    public void deleteFriends(@PathVariable int id,
-                              @PathVariable int friendId) throws NotFoundException {
-        log.info("Получен запрос к эндпоинту: /users/{id}/friends/{friendId}, метод DELETE");
-        if (userStorage.idNotExist(id)) {
-            throw new NotFoundException(id,"Ошибка, пользователя с таким id = " + id + " не существует.");
-        }
-        if (userStorage.idNotExist(friendId)) {
-            throw new NotFoundException(friendId,"Ошибка, пользователя с таким id = " + friendId + " не существует.");
-        }
-
-        userService.deleteFriend(id,friendId);
-    }
 
     /**
      * Получить список всех пользователей.
@@ -184,5 +152,32 @@ public class UserController {
         }
 
         return userService.findAllMutualFriends(id,otherId);
+    }
+
+    /**
+     * Получить список рекомендованных фильмов для конкретного пользователя.
+     * @param id идентификатор пользователя.
+     * @return список фильмов.
+     * @throws NotFoundException если пользователя с таким id не существует.
+     */
+    @GetMapping("users/{id}/recommendations")
+    public List<Film> findRecommendedFilms(@PathVariable(value = "id") long id) throws NotFoundException {
+        log.info("Получен запрос к эндпоинту: /users/{id}/recommendations, метод GET");
+        if (userStorage.idNotExist(id)) {
+            throw new NotFoundException(id,"Ошибка, пользователя с таким id = " + id + "не существует.");
+        }
+        return userService.findRecommendedFilms(id);
+        }
+        
+        
+    /**
+     * Получить ленту событий для указанного userId.
+     * @param id идентификатор пользователя.
+     * @return Лента событий.
+     */
+    @GetMapping("/users/{id}/feed")
+    public List<UserActivity> getActivitiesByUserId(@PathVariable long id) {
+        log.info("Получен запрос к эндпоинту: /users/{id}/feed, метод GET");
+        return activityService.getAllByUserId(id);
     }
 }
